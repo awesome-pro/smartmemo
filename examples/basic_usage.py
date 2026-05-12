@@ -44,7 +44,9 @@ async def main() -> None:
             llm_function=call_llm,
         )
 
-        print({"first_hit": first.was_cache_hit, "second_hit": second.was_cache_hit, "calls": calls})
+        print(
+            {"first_hit": first.was_cache_hit, "second_hit": second.was_cache_hit, "calls": calls}
+        )
         print(cache.stats().model_dump())
         cache.close()
 

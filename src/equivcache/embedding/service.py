@@ -117,8 +117,7 @@ class FaissVectorIndex:
             faiss: Any = __import__("faiss")
         except ImportError as exc:
             msg = (
-                "FaissVectorIndex requires `faiss-cpu`. "
-                "Install with `pip install equivcache[ml]`."
+                "FaissVectorIndex requires `faiss-cpu`. Install with `pip install equivcache[ml]`."
             )
             raise MissingDependencyError(msg) from exc
 
