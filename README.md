@@ -1,11 +1,11 @@
 # SmartMemo
 
-SmartMemo is a portfolio-grade implementation of semantic caching for LLM agent calls.
-The project thesis is simple: cosine similarity is a useful candidate selector, but it is
-not semantic equivalence. The production version should use a learned equivalence
-classifier to decide cache hits.
+SmartMemo is a semantic memory and caching layer for LLM agent calls. Its core thesis is
+simple: cosine similarity is a useful candidate selector, but it is not semantic
+equivalence. SmartMemo uses embedding search to find likely cache candidates, then can use
+a learned equivalence classifier to decide whether a cached response is safe to reuse.
 
-This first implementation deliberately ships the baseline first:
+The current implementation ships the baseline and the first classifier-gated cache path:
 
 - async `SmartMemo.get_or_call(...)`
 - SQLite persistence
@@ -13,11 +13,11 @@ This first implementation deliberately ships the baseline first:
 - FAISS-backed vector search when `smartmemo[ml]` is installed
 - dependency-light in-memory search for tests and smoke demos
 - measured cosine-baseline benchmark fixtures for customer-support prompts
-- classifier training and evaluation scaffolding for the next phase
+- classifier training, evaluation, checkpoint inference, and optional classifier-gated hits
 
-The classifier fields are present in the public result shape, but `classifier_score` is
-`None` in the cache path. That keeps the API ready for the learned judge without pretending
-a production classifier has been trained or integrated.
+By default, SmartMemo keeps the lightweight cosine baseline. When you provide a classifier
+checkpoint, cosine search becomes the candidate selector and the learned classifier makes
+the final cache-hit decision. SmartMemo does not ship a production pretrained classifier yet.
 
 ## Install
 
@@ -67,7 +67,7 @@ The numbers from that benchmark are the only performance claims this implementat
 
 ## Classifier Pipeline
 
-Phase 2 adds a trainable pair classifier over prompt embeddings:
+SmartMemo includes a trainable pair classifier over prompt embeddings:
 
 ```bash
 uv run smartmemo train-classifier \
@@ -81,15 +81,29 @@ uv run smartmemo train-classifier \
 Use the hash provider only for smoke checks. Real experiments should install
 `smartmemo[ml]` and use the SentenceTransformers embedding provider.
 
+Use a trained checkpoint for classifier-gated cache decisions:
+
+```python
+from smartmemo import ClassifierConfig, SmartMemo
+
+cache = SmartMemo(
+    domain="customer-support",
+    classifier=ClassifierConfig(model_path="models/classifier-smoke.pt"),
+)
+```
+
+When the classifier is active, `CacheResult.classifier_score` is populated for classifier
+hits and classifier-gated misses that had candidates.
+
 ## Release
 
-Version `0.0.1` is configured for PyPI as `smartmemo`. The repository publishes through
+Version `0.0.2` is configured for PyPI as `smartmemo`. The repository publishes through
 GitHub Actions trusted publishing from `.github/workflows/publish-pypi.yml` with the
 `pypi` environment.
 
 ```bash
-git tag v0.0.1
-git push origin v0.0.1
+git tag v0.0.2
+git push origin v0.0.2
 ```
 
 That tag builds the source distribution and wheel, then uploads them to PyPI.

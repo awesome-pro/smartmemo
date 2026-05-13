@@ -1,9 +1,10 @@
 # Quickstart
 
-SmartMemo is an async-first semantic cache for LLM agent calls. The first implementation
-ships the baseline cache layer: embeddings, top-k retrieval, SQLite persistence, and a
-cosine threshold decision. The learned equivalence classifier is the next milestone and
-will replace the threshold as the actual cache-hit decision.
+SmartMemo is an async-first semantic cache for LLM agent calls. The core package ships
+the baseline cache layer: embeddings, top-k retrieval, SQLite persistence, and a cosine
+threshold decision. If you provide a trained classifier checkpoint, SmartMemo keeps
+embedding search as the fast candidate selector and uses the classifier as the actual
+cache-hit decision.
 
 Install the core package:
 
@@ -31,3 +32,17 @@ result = await cache.get_or_call(prompt="Summarize this ticket", llm_function=ca
 print(result.response)
 print(result.was_cache_hit)
 ```
+
+Classifier-gated use:
+
+```python
+from smartmemo import ClassifierConfig, SmartMemo
+
+cache = SmartMemo(
+    domain="customer-support",
+    classifier=ClassifierConfig(model_path="models/classifier-v1.pt"),
+)
+```
+
+No production pretrained checkpoint is bundled yet. Train your own checkpoint with
+`smartmemo train-classifier` before enabling classifier-gated decisions.

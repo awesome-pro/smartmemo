@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "smartmemo"
-version = "0.0.1"
+version = "0.0.2"
 description = "Semantic memory for LLM agent calls with an equivalence-first cache architecture."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"

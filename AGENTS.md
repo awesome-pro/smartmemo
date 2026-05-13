@@ -559,8 +559,8 @@ Add the learning system.
 
 **Done when:** you can simulate a workload, report bad hits, retrain, and demonstrate the classifier got better on those specific cases.
 
-### Phase 5 — Integration with Your Other Libraries (Week 7)
-This is the portfolio-coherence phase.
+### Phase 5 — Integration with Related Agent Tooling (Week 7)
+This phase demonstrates how SmartCache composes with adjacent agent infrastructure.
 
 1. `examples/with_agentruntime.py` — wrap LLM calls inside AgentRuntime, show cost meter diff
 2. `examples/with_orchflow.py` — multi-step pipeline, show compounded savings
