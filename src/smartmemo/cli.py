@@ -18,6 +18,7 @@ def main() -> None:
     subparsers.add_parser("stats", help="Show persisted cache entry counts.")
     _add_train_classifier_parser(subparsers)
     _add_eval_classifier_parser(subparsers)
+    _add_export_feedback_parser(subparsers)
     args = parser.parse_args()
 
     if args.command == "stats":
@@ -28,6 +29,8 @@ def main() -> None:
         _train_classifier(args)
     elif args.command == "eval-classifier":
         _eval_classifier(args)
+    elif args.command == "export-feedback":
+        _export_feedback(args)
 
 
 def _add_train_classifier_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
@@ -61,6 +64,15 @@ def _add_eval_classifier_parser(subparsers: argparse._SubParsersAction[Any]) -> 
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--threshold", type=float, default=None)
     parser.add_argument("--device", default="cpu")
+
+
+def _add_export_feedback_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "export-feedback",
+        help="Export feedback events as classifier training JSONL pairs.",
+    )
+    parser.add_argument("--out", required=True, help="Output JSONL path.")
+    parser.add_argument("--split", default="train", help="Split value written to each record.")
 
 
 def _add_embedding_args(parser: argparse.ArgumentParser) -> None:
@@ -132,6 +144,13 @@ def _eval_classifier(args: argparse.Namespace) -> None:
         device=args.device,
     )
     print(json.dumps(metrics.to_dict(), indent=2, sort_keys=True))
+
+
+def _export_feedback(args: argparse.Namespace) -> None:
+    store = SQLiteCacheStore(args.db_path)
+    count = store.export_feedback_pairs(args.out, split=args.split)
+    store.close()
+    print(f"exported={count} path={args.out}")
 
 
 def _embedding_provider(args: argparse.Namespace):

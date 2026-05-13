@@ -32,3 +32,21 @@ uv run smartmemo train-classifier \
 ```
 
 The smoke command proves the pipeline works. It is not a quality benchmark.
+
+## Training From Feedback
+
+SmartMemo can export explicit cache-hit feedback as JSONL pairs:
+
+```bash
+uv run smartmemo export-feedback \
+  --out data/feedback_pairs.jsonl \
+  --split train
+```
+
+Bad-hit feedback is exported as label `0`; good-hit feedback is exported as label `1`.
+The query prompt is paired with the cached prompt that was reused. Cached responses are not
+duplicated in the feedback export.
+
+The exported file uses the same format as other classifier datasets, so it can be passed
+directly to `smartmemo train-classifier`. This step prepares training data only; automated
+retraining, evaluation gates, and model deployment are intentionally left to a later phase.

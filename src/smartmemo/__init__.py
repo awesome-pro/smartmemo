@@ -8,6 +8,8 @@ from smartmemo.models import (
     CacheStats,
     ClassifierConfig,
     EvictionPolicy,
+    FeedbackEvent,
+    LookupRecord,
 )
 
 __all__ = [
@@ -18,4 +20,6 @@ __all__ = [
     "ClassifierConfig",
     "SmartMemo",
     "EvictionPolicy",
+    "FeedbackEvent",
+    "LookupRecord",
 ]

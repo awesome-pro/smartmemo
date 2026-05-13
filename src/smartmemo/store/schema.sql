@@ -17,3 +17,36 @@ ON cache_entries(last_hit_at, created_at);
 
 CREATE INDEX IF NOT EXISTS idx_cache_entries_created_at
 ON cache_entries(created_at);
+
+CREATE TABLE IF NOT EXISTS lookup_records (
+    query_id TEXT PRIMARY KEY,
+    domain TEXT NOT NULL,
+    query_prompt TEXT NOT NULL,
+    query_embedding BLOB NOT NULL,
+    cache_entry_id TEXT NOT NULL,
+    similarity_score REAL,
+    classifier_score REAL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY(cache_entry_id) REFERENCES cache_entries(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_lookup_records_cache_entry_id
+ON lookup_records(cache_entry_id);
+
+CREATE TABLE IF NOT EXISTS feedback_events (
+    id TEXT PRIMARY KEY,
+    query_id TEXT NOT NULL,
+    cache_entry_id TEXT NOT NULL,
+    label INTEGER NOT NULL,
+    reason TEXT,
+    created_at TEXT NOT NULL,
+    metadata_json TEXT NOT NULL DEFAULT '{}',
+    FOREIGN KEY(query_id) REFERENCES lookup_records(query_id) ON DELETE CASCADE,
+    FOREIGN KEY(cache_entry_id) REFERENCES cache_entries(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_feedback_events_query_id
+ON feedback_events(query_id);
+
+CREATE INDEX IF NOT EXISTS idx_feedback_events_created_at
+ON feedback_events(created_at);

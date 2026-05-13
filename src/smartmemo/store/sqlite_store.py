@@ -13,7 +13,7 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
-from smartmemo.models import CacheEntry, EvictionPolicy
+from smartmemo.models import CacheEntry, EvictionPolicy, FeedbackEvent, LookupRecord
 from smartmemo.types import FloatVector
 
 
@@ -143,6 +143,153 @@ class SQLiteCacheStore:
         )
         self._connection.commit()
 
+    def record_lookup(
+        self,
+        *,
+        query_id: UUID,
+        domain: str,
+        prompt: str,
+        embedding: FloatVector,
+        cache_entry_id: UUID,
+        similarity_score: float | None,
+        classifier_score: float | None,
+    ) -> None:
+        self._connection.execute(
+            """
+            INSERT OR REPLACE INTO lookup_records (
+                query_id, domain, query_prompt, query_embedding, cache_entry_id,
+                similarity_score, classifier_score, created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                str(query_id),
+                domain,
+                prompt,
+                _to_blob(embedding),
+                str(cache_entry_id),
+                similarity_score,
+                classifier_score,
+                _serialize_time(_now()),
+            ),
+        )
+        self._connection.commit()
+
+    def get_lookup(self, query_id: UUID) -> LookupRecord | None:
+        row = self._connection.execute(
+            "SELECT * FROM lookup_records WHERE query_id = ?",
+            (str(query_id),),
+        ).fetchone()
+        return self._row_to_lookup(row) if row is not None else None
+
+    def lookup_count(self) -> int:
+        row = self._connection.execute("SELECT COUNT(*) AS count FROM lookup_records").fetchone()
+        return int(row["count"])
+
+    def record_feedback(
+        self,
+        *,
+        query_id: UUID,
+        label: int,
+        reason: str | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> UUID | None:
+        if label not in {0, 1}:
+            msg = f"feedback label must be 0 or 1, got {label}"
+            raise ValueError(msg)
+        lookup = self.get_lookup(query_id)
+        if lookup is None:
+            return None
+        event_id = uuid4()
+        self._connection.execute(
+            """
+            INSERT INTO feedback_events (
+                id, query_id, cache_entry_id, label, reason, created_at, metadata_json
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                str(event_id),
+                str(query_id),
+                str(lookup.cache_entry_id),
+                label,
+                reason,
+                _serialize_time(_now()),
+                json.dumps(metadata or {}, sort_keys=True),
+            ),
+        )
+        self._connection.commit()
+        return event_id
+
+    def feedback_count(self) -> int:
+        row = self._connection.execute("SELECT COUNT(*) AS count FROM feedback_events").fetchone()
+        return int(row["count"])
+
+    def feedback_events(self) -> Iterator[FeedbackEvent]:
+        rows = self._connection.execute("SELECT * FROM feedback_events ORDER BY created_at ASC")
+        for row in rows:
+            yield self._row_to_feedback(row)
+
+    def export_feedback_pairs(
+        self,
+        path: Path | str,
+        *,
+        split: str = "train",
+    ) -> int:
+        rows = self._connection.execute(
+            """
+            SELECT
+                feedback_events.id AS event_id,
+                feedback_events.query_id AS query_id,
+                feedback_events.cache_entry_id AS cache_entry_id,
+                feedback_events.label AS label,
+                feedback_events.reason AS reason,
+                feedback_events.created_at AS feedback_created_at,
+                feedback_events.metadata_json AS feedback_metadata_json,
+                lookup_records.domain AS domain,
+                lookup_records.query_prompt AS query_prompt,
+                lookup_records.similarity_score AS similarity_score,
+                lookup_records.classifier_score AS classifier_score,
+                cache_entries.prompt AS cached_prompt
+            FROM feedback_events
+            JOIN lookup_records ON lookup_records.query_id = feedback_events.query_id
+            JOIN cache_entries ON cache_entries.id = feedback_events.cache_entry_id
+            ORDER BY feedback_events.created_at ASC
+            """
+        ).fetchall()
+        output_path = Path(path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        lines = []
+        for row in rows:
+            metadata = json.loads(row["feedback_metadata_json"])
+            metadata.update(
+                {
+                    "feedback_event_id": row["event_id"],
+                    "query_id": row["query_id"],
+                    "cache_entry_id": row["cache_entry_id"],
+                    "reason": row["reason"],
+                    "similarity_score": row["similarity_score"],
+                    "classifier_score": row["classifier_score"],
+                    "feedback_created_at": row["feedback_created_at"],
+                }
+            )
+            lines.append(
+                json.dumps(
+                    {
+                        "prompt_a": row["query_prompt"],
+                        "prompt_b": row["cached_prompt"],
+                        "label": int(row["label"]),
+                        "domain": row["domain"],
+                        "source": "smartmemo-feedback",
+                        "split": split,
+                        "metadata": metadata,
+                    },
+                    sort_keys=True,
+                )
+            )
+        output_path.write_text("\n".join(lines) + ("\n" if lines else ""))
+        return len(lines)
+
     def delete(self, entry_id: UUID) -> None:
         self._connection.execute("DELETE FROM cache_entries WHERE id = ?", (str(entry_id),))
         self._connection.commit()
@@ -206,4 +353,27 @@ class SQLiteCacheStore:
             feedback_negative_count=int(row["feedback_negative_count"]),
             feedback_positive_count=int(row["feedback_positive_count"]),
             metadata=metadata,
+        )
+
+    def _row_to_lookup(self, row: sqlite3.Row) -> LookupRecord:
+        return LookupRecord(
+            id=UUID(row["query_id"]),
+            domain=row["domain"],
+            prompt=row["query_prompt"],
+            prompt_embedding=_from_blob(row["query_embedding"]),
+            cache_entry_id=UUID(row["cache_entry_id"]),
+            similarity_score=row["similarity_score"],
+            classifier_score=row["classifier_score"],
+            created_at=_parse_time(row["created_at"]) or _now(),
+        )
+
+    def _row_to_feedback(self, row: sqlite3.Row) -> FeedbackEvent:
+        return FeedbackEvent(
+            id=UUID(row["id"]),
+            query_id=UUID(row["query_id"]),
+            cache_entry_id=UUID(row["cache_entry_id"]),
+            label=int(row["label"]),
+            reason=row["reason"],
+            created_at=_parse_time(row["created_at"]) or _now(),
+            metadata=json.loads(row["metadata_json"]),
         )

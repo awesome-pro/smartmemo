@@ -11,3 +11,5 @@ def test_public_api_exports() -> None:
     assert smartmemo.CacheEntry is not None
     assert smartmemo.ClassifierConfig is not None
     assert smartmemo.EvictionPolicy is not None
+    assert smartmemo.FeedbackEvent is not None
+    assert smartmemo.LookupRecord is not None

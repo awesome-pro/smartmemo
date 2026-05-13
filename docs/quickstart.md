@@ -46,3 +46,18 @@ cache = SmartMemo(
 
 No production pretrained checkpoint is bundled yet. Train your own checkpoint with
 `smartmemo train-classifier` before enabling classifier-gated decisions.
+
+Feedback export:
+
+```python
+result = await cache.get_or_call(prompt="Summarize this ticket", llm_function=call_llm)
+
+if result.was_cache_hit:
+    await cache.report_bad_hit(result.query_id, reason="user rejected cached answer")
+
+cache.export_feedback_pairs("data/feedback_pairs.jsonl")
+```
+
+The exported file can be passed to `smartmemo train-classifier`. This is a manual feedback
+loop: SmartMemo stores and exports the training signal, but it does not retrain or deploy
+new classifiers automatically yet.
