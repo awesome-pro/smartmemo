@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 from uuid import UUID
 
@@ -77,14 +78,16 @@ class SmartMemo:
         )
 
     async def report_bad_hit(self, query_id: UUID, reason: str | None = None) -> bool:
-        _ = reason
-        return self._orchestrator.report_bad_hit(query_id)
+        return self._orchestrator.report_bad_hit(query_id, reason=reason)
 
     async def report_good_hit(self, query_id: UUID) -> bool:
         return self._orchestrator.report_good_hit(query_id)
 
     def stats(self) -> CacheStats:
         return self._orchestrator.stats()
+
+    def export_feedback_pairs(self, path: Path | str, *, split: str = "train") -> int:
+        return self._orchestrator.export_feedback_pairs(str(path), split=split)
 
     def close(self) -> None:
         self.store.close()

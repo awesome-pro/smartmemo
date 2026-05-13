@@ -73,6 +73,31 @@ class CacheEntry(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
+class LookupRecord(BaseModel):
+    """A cache-hit lookup that can receive later feedback."""
+
+    id: UUID
+    domain: str
+    prompt: str
+    prompt_embedding: list[float]
+    cache_entry_id: UUID
+    similarity_score: float | None = None
+    classifier_score: float | None = None
+    created_at: datetime
+
+
+class FeedbackEvent(BaseModel):
+    """Durable feedback attached to one cache-hit lookup."""
+
+    id: UUID
+    query_id: UUID
+    cache_entry_id: UUID
+    label: int
+    reason: str | None = None
+    created_at: datetime
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
 class CacheResult(BaseModel):
     """Result returned by `SmartMemo.get_or_call`."""
 

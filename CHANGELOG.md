@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.3
+
+- Add durable lookup records for cache hits so feedback can be exported later.
+- Add durable good/bad feedback events tied to cache-hit query IDs.
+- Add `SmartMemo.export_feedback_pairs(...)` and `smartmemo export-feedback`.
+- Export feedback-derived JSONL compatible with the classifier training pipeline.
+
 ## 0.0.2
 
 - Add optional classifier-gated cache decisions through `SmartMemo(..., classifier=...)`.

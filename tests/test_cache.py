@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
+from uuid import uuid4
 
 import numpy as np
 
 from smartmemo import CacheConfig, SmartMemo
+from smartmemo.classifier.data import load_pair_records
 from smartmemo.embedding import EmbeddingService, InMemoryVectorIndex
 from smartmemo.orchestrator import CacheOrchestrator
 from smartmemo.store import SQLiteCacheStore
@@ -197,6 +199,67 @@ async def test_feedback_updates_hit_entry(cache: SmartMemo) -> None:
     entry = cache.store.get(hit.cache_entry_id)
     assert entry is not None
     assert entry.feedback_negative_count == 1
+
+
+async def test_cache_hit_creates_lookup_and_durable_bad_feedback(cache: SmartMemo) -> None:
+    async def llm(prompt: str) -> str:
+        return f"fresh:{prompt}"
+
+    await cache.get_or_call(prompt="alpha", llm_function=llm)
+    hit = await cache.get_or_call(prompt="alpha duplicate", llm_function=llm)
+
+    assert cache.store.lookup_count() == 1
+    assert await cache.report_bad_hit(hit.query_id, reason="wrong cached answer") is True
+
+    events = list(cache.store.feedback_events())
+    assert len(events) == 1
+    assert events[0].label == 0
+    assert events[0].reason == "wrong cached answer"
+
+
+async def test_good_feedback_persists_positive_event(cache: SmartMemo) -> None:
+    async def llm(prompt: str) -> str:
+        return f"fresh:{prompt}"
+
+    await cache.get_or_call(prompt="alpha", llm_function=llm)
+    hit = await cache.get_or_call(prompt="alpha duplicate", llm_function=llm)
+
+    assert await cache.report_good_hit(hit.query_id) is True
+
+    events = list(cache.store.feedback_events())
+    assert len(events) == 1
+    assert events[0].label == 1
+    assert hit.cache_entry_id is not None
+    entry = cache.store.get(hit.cache_entry_id)
+    assert entry is not None
+    assert entry.feedback_positive_count == 1
+
+
+async def test_unknown_feedback_query_returns_false(cache: SmartMemo) -> None:
+    assert await cache.report_bad_hit(uuid4(), reason="missing") is False
+    assert await cache.report_good_hit(uuid4()) is False
+    assert cache.store.feedback_count() == 0
+
+
+async def test_export_feedback_pairs_public_api(cache: SmartMemo, tmp_path: Path) -> None:
+    output_path = tmp_path / "feedback_pairs.jsonl"
+
+    async def llm(prompt: str) -> str:
+        return f"fresh:{prompt}"
+
+    await cache.get_or_call(prompt="alpha", llm_function=llm)
+    bad_hit = await cache.get_or_call(prompt="alpha duplicate", llm_function=llm)
+    good_hit = await cache.get_or_call(prompt="alpha duplicate", llm_function=llm)
+    await cache.report_bad_hit(bad_hit.query_id, reason="bad match")
+    await cache.report_good_hit(good_hit.query_id)
+
+    exported = cache.export_feedback_pairs(output_path, split="train")
+    records = load_pair_records(output_path, split="train", domain="test")
+
+    assert exported == 2
+    assert [record.label for record in records] == [0, 1]
+    assert records[0].prompt_a == "alpha duplicate"
+    assert records[0].prompt_b == "alpha"
 
 
 async def test_stats_track_runtime_counts(cache: SmartMemo) -> None:

@@ -38,7 +38,6 @@ class CacheOrchestrator:
         self.cache_hits = 0
         self.cache_misses = 0
         self.total_cost_saved_usd = Decimal("0")
-        self._query_to_entry: dict[UUID, UUID] = {}
         self._rebuild_index_from_store()
 
     async def get_or_call(
@@ -60,9 +59,17 @@ class CacheOrchestrator:
             entry = self.store.get(hit_entry_id)
             if entry is not None:
                 self.store.update_hit(entry.id)
+                self.store.record_lookup(
+                    query_id=query_id,
+                    domain=self.domain,
+                    prompt=prompt,
+                    embedding=query_embedding,
+                    cache_entry_id=entry.id,
+                    similarity_score=similarity_score,
+                    classifier_score=classifier_score,
+                )
                 self.cache_hits += 1
                 self.total_cost_saved_usd += self.config.estimated_llm_cost_usd
-                self._query_to_entry[query_id] = entry.id
                 return CacheResult(
                     query_id=query_id,
                     response=entry.response,
@@ -96,19 +103,28 @@ class CacheOrchestrator:
             latency_ms=self._elapsed_ms(started_at),
         )
 
-    def report_bad_hit(self, query_id: UUID) -> bool:
-        entry_id = self._query_to_entry.get(query_id)
-        if entry_id is None:
+    def report_bad_hit(self, query_id: UUID, reason: str | None = None) -> bool:
+        lookup = self.store.get_lookup(query_id)
+        if lookup is None:
             return False
-        self.store.increment_bad_feedback(entry_id)
+        event_id = self.store.record_feedback(query_id=query_id, label=0, reason=reason)
+        if event_id is None:
+            return False
+        self.store.increment_bad_feedback(lookup.cache_entry_id)
         return True
 
     def report_good_hit(self, query_id: UUID) -> bool:
-        entry_id = self._query_to_entry.get(query_id)
-        if entry_id is None:
+        lookup = self.store.get_lookup(query_id)
+        if lookup is None:
             return False
-        self.store.increment_good_feedback(entry_id)
+        event_id = self.store.record_feedback(query_id=query_id, label=1)
+        if event_id is None:
+            return False
+        self.store.increment_good_feedback(lookup.cache_entry_id)
         return True
+
+    def export_feedback_pairs(self, path: str, *, split: str = "train") -> int:
+        return self.store.export_feedback_pairs(path, split=split)
 
     def stats(self) -> CacheStats:
         hit_rate = self.cache_hits / self.total_lookups if self.total_lookups else 0.0

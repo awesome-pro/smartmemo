@@ -14,6 +14,7 @@ The current implementation ships the baseline and the first classifier-gated cac
 - dependency-light in-memory search for tests and smoke demos
 - measured cosine-baseline benchmark fixtures for customer-support prompts
 - classifier training, evaluation, checkpoint inference, and optional classifier-gated hits
+- durable feedback export for classifier retraining data
 
 By default, SmartMemo keeps the lightweight cosine baseline. When you provide a classifier
 checkpoint, cosine search becomes the candidate selector and the learned classifier makes
@@ -95,15 +96,36 @@ cache = SmartMemo(
 When the classifier is active, `CacheResult.classifier_score` is populated for classifier
 hits and classifier-gated misses that had candidates.
 
+## Feedback Export
+
+SmartMemo records cache-hit lookups so explicit feedback can become training data:
+
+```python
+result = await cache.get_or_call(
+    prompt="Approve the customer's refund request",
+    llm_function=call_llm,
+)
+
+if result.was_cache_hit and user_rejected_answer:
+    await cache.report_bad_hit(result.query_id, reason="wrong refund decision")
+
+written = cache.export_feedback_pairs("data/feedback_pairs.jsonl")
+print(written)
+```
+
+The exported JSONL uses the same prompt-pair shape accepted by `smartmemo train-classifier`.
+Feedback export is manual training data preparation; SmartMemo does not automatically retrain
+or deploy classifiers yet.
+
 ## Release
 
-Version `0.0.2` is configured for PyPI as `smartmemo`. The repository publishes through
+Version `0.0.3` is configured for PyPI as `smartmemo`. The repository publishes through
 GitHub Actions trusted publishing from `.github/workflows/publish-pypi.yml` with the
 `pypi` environment.
 
 ```bash
-git tag v0.0.2
-git push origin v0.0.2
+git tag v0.0.3
+git push origin v0.0.3
 ```
 
 That tag builds the source distribution and wheel, then uploads them to PyPI.
