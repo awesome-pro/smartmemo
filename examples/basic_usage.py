@@ -1,4 +1,4 @@
-"""Minimal dependency-light EquivCache example.
+"""Minimal dependency-light SmartMemo example.
 
 Run with:
     uv run python examples/basic_usage.py
@@ -10,16 +10,16 @@ import asyncio
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from equivcache import CacheConfig, EquivCache
-from equivcache.embedding import HashEmbeddingProvider
+from smartmemo import CacheConfig, SmartMemo
+from smartmemo.embedding import HashEmbeddingProvider
 
 
 async def main() -> None:
     with TemporaryDirectory() as temp_dir:
-        cache = EquivCache(
+        cache = SmartMemo(
             domain="customer-support",
             config=CacheConfig(
-                db_path=Path(temp_dir) / "equivcache.db",
+                db_path=Path(temp_dir) / "smartmemo.db",
                 embedding_dim=32,
                 cosine_threshold=0.80,
                 estimated_llm_cost_usd="0.002",

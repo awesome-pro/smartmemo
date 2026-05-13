@@ -9,9 +9,9 @@ from typing import Any
 import numpy as np
 import torch
 
-from equivcache.classifier.model import PairClassifier
-from equivcache.embedding.service import normalize
-from equivcache.types import FloatVector
+from smartmemo.classifier.model import PairClassifier
+from smartmemo.embedding.service import normalize
+from smartmemo.types import FloatVector
 
 _torch: Any = torch
 

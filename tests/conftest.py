@@ -7,8 +7,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from equivcache import CacheConfig, EquivCache
-from equivcache.types import FloatVector
+from smartmemo import CacheConfig, SmartMemo
+from smartmemo.types import FloatVector
 
 
 class ToyEmbeddingProvider:
@@ -31,7 +31,7 @@ class ToyEmbeddingProvider:
 @pytest.fixture
 def cache_config(tmp_path: Path) -> CacheConfig:
     return CacheConfig(
-        db_path=tmp_path / "equivcache.db",
+        db_path=tmp_path / "smartmemo.db",
         embedding_dim=ToyEmbeddingProvider.dim,
         cosine_threshold=0.95,
         candidate_k=3,
@@ -41,8 +41,8 @@ def cache_config(tmp_path: Path) -> CacheConfig:
 
 
 @pytest.fixture
-def cache(cache_config: CacheConfig) -> Generator[EquivCache]:
-    instance = EquivCache(
+def cache(cache_config: CacheConfig) -> Generator[SmartMemo]:
+    instance = SmartMemo(
         domain="test",
         config=cache_config,
         embedding_provider=ToyEmbeddingProvider(),

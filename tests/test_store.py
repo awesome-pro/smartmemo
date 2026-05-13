@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from equivcache.models import EvictionPolicy
-from equivcache.store import SQLiteCacheStore
+from smartmemo.models import EvictionPolicy
+from smartmemo.store import SQLiteCacheStore
 
 
 def test_store_add_get_and_update_hit(tmp_path) -> None:

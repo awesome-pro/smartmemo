@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from equivcache import EquivCache
+from smartmemo import SmartMemo
 
 
-async def test_get_or_call_misses_then_hits(cache: EquivCache) -> None:
+async def test_get_or_call_misses_then_hits(cache: SmartMemo) -> None:
     calls = 0
 
     async def llm(prompt: str) -> str:
@@ -23,7 +23,7 @@ async def test_get_or_call_misses_then_hits(cache: EquivCache) -> None:
     assert calls == 1
 
 
-async def test_threshold_rejects_low_similarity(cache: EquivCache) -> None:
+async def test_threshold_rejects_low_similarity(cache: SmartMemo) -> None:
     calls = 0
 
     def llm(prompt: str) -> str:
@@ -40,7 +40,7 @@ async def test_threshold_rejects_low_similarity(cache: EquivCache) -> None:
     assert calls == 2
 
 
-async def test_feedback_updates_hit_entry(cache: EquivCache) -> None:
+async def test_feedback_updates_hit_entry(cache: SmartMemo) -> None:
     async def llm(prompt: str) -> str:
         return f"fresh:{prompt}"
 
@@ -54,7 +54,7 @@ async def test_feedback_updates_hit_entry(cache: EquivCache) -> None:
     assert entry.feedback_negative_count == 1
 
 
-async def test_stats_track_runtime_counts(cache: EquivCache) -> None:
+async def test_stats_track_runtime_counts(cache: SmartMemo) -> None:
     async def llm(prompt: str) -> str:
         return f"fresh:{prompt}"
 

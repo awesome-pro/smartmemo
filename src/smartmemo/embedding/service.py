@@ -9,8 +9,8 @@ from uuid import UUID
 
 import numpy as np
 
-from equivcache.exceptions import MissingDependencyError
-from equivcache.types import EmbeddingProvider, FloatVector
+from smartmemo.exceptions import MissingDependencyError
+from smartmemo.types import EmbeddingProvider, FloatVector
 
 
 @dataclass(frozen=True)
@@ -34,7 +34,7 @@ def normalize(vector: FloatVector) -> FloatVector:
 class HashEmbeddingProvider:
     """Deterministic lightweight embedding provider for tests and smoke demos.
 
-    This is not a semantic model. Real deployments should install `equivcache[ml]`
+    This is not a semantic model. Real deployments should install `smartmemo[ml]`
     and use `SentenceTransformerEmbeddingProvider`.
     """
 
@@ -60,7 +60,7 @@ class SentenceTransformerEmbeddingProvider:
         except ImportError as exc:
             msg = (
                 "SentenceTransformerEmbeddingProvider requires optional ML dependencies. "
-                "Install with `pip install equivcache[ml]`."
+                "Install with `pip install smartmemo[ml]`."
             )
             raise MissingDependencyError(msg) from exc
 
@@ -116,9 +116,7 @@ class FaissVectorIndex:
         try:
             faiss: Any = __import__("faiss")
         except ImportError as exc:
-            msg = (
-                "FaissVectorIndex requires `faiss-cpu`. Install with `pip install equivcache[ml]`."
-            )
+            msg = "FaissVectorIndex requires `faiss-cpu`. Install with `pip install smartmemo[ml]`."
             raise MissingDependencyError(msg) from exc
 
         self.dim = dim

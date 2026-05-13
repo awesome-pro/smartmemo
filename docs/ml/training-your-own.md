@@ -12,7 +12,7 @@ experiments.
 Run a local training job:
 
 ```bash
-uv run equivcache train-classifier \
+uv run smartmemo train-classifier \
   --data data/fixtures/customer_support_pairs.jsonl \
   --out models/classifier-v1.pt \
   --domain customer-support \
@@ -23,7 +23,7 @@ By default, the CLI uses `sentence-transformers/all-MiniLM-L6-v2`, so the `ml` e
 required. For dependency-light smoke runs, use deterministic hash embeddings:
 
 ```bash
-uv run equivcache train-classifier \
+uv run smartmemo train-classifier \
   --data data/fixtures/customer_support_pairs.jsonl \
   --out models/classifier-smoke.pt \
   --embedding-provider hash \

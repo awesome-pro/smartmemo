@@ -5,20 +5,20 @@ from __future__ import annotations
 from typing import Any
 from uuid import UUID
 
-from equivcache.embedding import (
+from smartmemo.embedding import (
     EmbeddingService,
     FaissVectorIndex,
     InMemoryVectorIndex,
     SentenceTransformerEmbeddingProvider,
 )
-from equivcache.exceptions import MissingDependencyError
-from equivcache.models import CacheConfig, CacheResult, CacheStats
-from equivcache.orchestrator import CacheOrchestrator
-from equivcache.store import SQLiteCacheStore
-from equivcache.types import EmbeddingProvider, LLMFunction
+from smartmemo.exceptions import MissingDependencyError
+from smartmemo.models import CacheConfig, CacheResult, CacheStats
+from smartmemo.orchestrator import CacheOrchestrator
+from smartmemo.store import SQLiteCacheStore
+from smartmemo.types import EmbeddingProvider, LLMFunction
 
 
-class EquivCache:
+class SmartMemo:
     """Async-first semantic cache facade.
 
     The first implementation uses cosine similarity as a measured baseline.

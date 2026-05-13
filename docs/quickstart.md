@@ -1,6 +1,6 @@
 # Quickstart
 
-EquivCache is an async-first semantic cache for LLM agent calls. The first implementation
+SmartMemo is an async-first semantic cache for LLM agent calls. The first implementation
 ships the baseline cache layer: embeddings, top-k retrieval, SQLite persistence, and a
 cosine threshold decision. The learned equivalence classifier is the next milestone and
 will replace the threshold as the actual cache-hit decision.
@@ -8,21 +8,21 @@ will replace the threshold as the actual cache-hit decision.
 Install the core package:
 
 ```bash
-pip install equivcache
+pip install smartmemo
 ```
 
 Install real embedding and vector-search dependencies:
 
 ```bash
-pip install "equivcache[ml]"
+pip install "smartmemo[ml]"
 ```
 
 Minimal use:
 
 ```python
-from equivcache import EquivCache
+from smartmemo import SmartMemo
 
-cache = EquivCache(domain="customer-support")
+cache = SmartMemo(domain="customer-support")
 
 async def call_llm(prompt: str) -> str:
     return "fresh response from your provider"

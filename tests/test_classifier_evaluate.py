@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from equivcache.classifier import compute_binary_metrics
+from smartmemo.classifier import compute_binary_metrics
 
 
 def test_compute_binary_metrics_reports_confusion_counts() -> None:

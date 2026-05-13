@@ -11,10 +11,10 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
-from equivcache.classifier.data import EmbeddedPairDataset, PairRecord
-from equivcache.classifier.evaluate import EvaluationMetrics, evaluate_model
-from equivcache.classifier.model import PairClassifier
-from equivcache.types import EmbeddingProvider
+from smartmemo.classifier.data import EmbeddedPairDataset, PairRecord
+from smartmemo.classifier.evaluate import EvaluationMetrics, evaluate_model
+from smartmemo.classifier.model import PairClassifier
+from smartmemo.types import EmbeddingProvider
 
 _torch: Any = torch
 

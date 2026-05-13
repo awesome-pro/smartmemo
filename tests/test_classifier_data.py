@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from equivcache.classifier.data import EmbeddedPairDataset, PairRecord, load_pair_records
-from equivcache.types import FloatVector
+from smartmemo.classifier.data import EmbeddedPairDataset, PairRecord, load_pair_records
+from smartmemo.types import FloatVector
 
 
 class Provider:

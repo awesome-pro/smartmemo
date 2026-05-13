@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pytest
 
-from equivcache import CacheConfig, EvictionPolicy
+from smartmemo import CacheConfig, EvictionPolicy
 
 
 def test_cache_config_defaults() -> None:

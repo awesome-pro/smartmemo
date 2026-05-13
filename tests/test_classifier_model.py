@@ -4,7 +4,7 @@ from typing import Any
 
 import torch
 
-from equivcache.classifier import PairClassifier, build_pair_features
+from smartmemo.classifier import PairClassifier, build_pair_features
 
 _torch: Any = torch
 

@@ -9,9 +9,9 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 
-from equivcache.classifier.data import EmbeddedPairDataset, PairRecord
-from equivcache.classifier.model import PairClassifier
-from equivcache.types import EmbeddingProvider
+from smartmemo.classifier.data import EmbeddedPairDataset, PairRecord
+from smartmemo.classifier.model import PairClassifier
+from smartmemo.types import EmbeddingProvider
 
 _torch: Any = torch
 

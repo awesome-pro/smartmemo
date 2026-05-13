@@ -10,10 +10,10 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
-from equivcache.embedding import EmbeddingService
-from equivcache.models import CacheConfig, CacheResult, CacheStats
-from equivcache.store import SQLiteCacheStore
-from equivcache.types import LLMFunction
+from smartmemo.embedding import EmbeddingService
+from smartmemo.models import CacheConfig, CacheResult, CacheStats
+from smartmemo.store import SQLiteCacheStore
+from smartmemo.types import LLMFunction
 
 
 class CacheOrchestrator:

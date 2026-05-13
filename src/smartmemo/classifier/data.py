@@ -11,8 +11,8 @@ from typing import Any
 import torch
 from torch.utils.data import Dataset
 
-from equivcache.embedding.service import normalize
-from equivcache.types import EmbeddingProvider
+from smartmemo.embedding.service import normalize
+from smartmemo.types import EmbeddingProvider
 
 _torch: Any = torch
 

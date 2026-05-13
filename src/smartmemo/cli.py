@@ -7,12 +7,12 @@ import json
 from pathlib import Path
 from typing import Any
 
-from equivcache import CacheConfig
-from equivcache.store import SQLiteCacheStore
+from smartmemo import CacheConfig
+from smartmemo.store import SQLiteCacheStore
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="equivcache")
+    parser = argparse.ArgumentParser(prog="smartmemo")
     parser.add_argument("--db-path", default=str(CacheConfig().db_path))
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("stats", help="Show persisted cache entry counts.")
@@ -79,7 +79,7 @@ def _add_embedding_args(parser: argparse.ArgumentParser) -> None:
 
 
 def _train_classifier(args: argparse.Namespace) -> None:
-    from equivcache.classifier import TrainingConfig, load_pair_records, train_classifier
+    from smartmemo.classifier import TrainingConfig, load_pair_records, train_classifier
 
     train_records = load_pair_records(args.data, split=args.train_split, domain=args.domain)
     validation_records = load_pair_records(
@@ -114,7 +114,7 @@ def _train_classifier(args: argparse.Namespace) -> None:
 
 
 def _eval_classifier(args: argparse.Namespace) -> None:
-    from equivcache.classifier import ClassifierService, evaluate_model, load_pair_records
+    from smartmemo.classifier import ClassifierService, evaluate_model, load_pair_records
 
     service = ClassifierService(
         args.model,
@@ -136,11 +136,11 @@ def _eval_classifier(args: argparse.Namespace) -> None:
 
 def _embedding_provider(args: argparse.Namespace):
     if args.embedding_provider == "hash":
-        from equivcache.embedding import HashEmbeddingProvider
+        from smartmemo.embedding import HashEmbeddingProvider
 
         return HashEmbeddingProvider(dim=args.embedding_dim)
 
-    from equivcache.embedding import SentenceTransformerEmbeddingProvider
+    from smartmemo.embedding import SentenceTransformerEmbeddingProvider
 
     return SentenceTransformerEmbeddingProvider(
         model_name=args.embedding_model,
