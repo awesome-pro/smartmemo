@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from typing import Protocol, TypeAlias
 
 import numpy as np
@@ -18,6 +18,16 @@ class EmbeddingProvider(Protocol):
 
     def embed(self, text: str) -> FloatVector:
         """Return one embedding vector for text."""
+        ...
+
+
+class EquivalenceClassifier(Protocol):
+    """Protocol implemented by prompt-pair equivalence classifiers."""
+
+    threshold: float
+
+    def predict_batch(self, pairs: Sequence[tuple[FloatVector, FloatVector]]) -> list[float]:
+        """Return equivalence probabilities for embedding pairs."""
         ...
 
 

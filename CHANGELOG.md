@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.2
+
+- Add optional classifier-gated cache decisions through `SmartMemo(..., classifier=...)`.
+- Populate `CacheResult.classifier_score` when the classifier evaluates cache candidates.
+- Preserve cosine-threshold behavior when no classifier checkpoint is configured.
+- Document classifier-enabled usage and the current cold-start boundary.
+
 ## 0.0.1
 
 Initial SmartMemo release.

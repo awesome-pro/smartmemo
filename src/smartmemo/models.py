@@ -52,7 +52,7 @@ class ClassifierConfig(BaseModel):
 
     model_path: Path | None = None
     device: str = "cpu"
-    threshold: float = Field(default=0.85, ge=0.0, le=1.0)
+    threshold: float | None = Field(default=None, ge=0.0, le=1.0)
 
 
 class CacheEntry(BaseModel):

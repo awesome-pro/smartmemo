@@ -11,9 +11,10 @@ from uuid import UUID, uuid4
 import numpy as np
 
 from smartmemo.embedding import EmbeddingService
+from smartmemo.embedding.service import SearchCandidate
 from smartmemo.models import CacheConfig, CacheResult, CacheStats
 from smartmemo.store import SQLiteCacheStore
-from smartmemo.types import LLMFunction
+from smartmemo.types import EquivalenceClassifier, FloatVector, LLMFunction
 
 
 class CacheOrchestrator:
@@ -26,11 +27,13 @@ class CacheOrchestrator:
         config: CacheConfig,
         store: SQLiteCacheStore,
         embedding_service: EmbeddingService,
+        classifier_service: EquivalenceClassifier | None = None,
     ) -> None:
         self.domain = domain
         self.config = config
         self.store = store
         self.embedding_service = embedding_service
+        self.classifier_service = classifier_service
         self.total_lookups = 0
         self.cache_hits = 0
         self.cache_misses = 0
@@ -51,7 +54,7 @@ class CacheOrchestrator:
         self.total_lookups += 1
 
         query_embedding = self.embedding_service.embed(prompt)
-        hit_entry_id, similarity_score = self._find_baseline_hit(query_embedding)
+        hit_entry_id, similarity_score, classifier_score = self._find_hit(query_embedding)
 
         if hit_entry_id is not None:
             entry = self.store.get(hit_entry_id)
@@ -66,7 +69,7 @@ class CacheOrchestrator:
                     was_cache_hit=True,
                     cache_entry_id=entry.id,
                     similarity_score=similarity_score,
-                    classifier_score=None,
+                    classifier_score=classifier_score,
                     cost_saved_usd=self.config.estimated_llm_cost_usd,
                     latency_ms=self._elapsed_ms(started_at),
                 )
@@ -88,7 +91,7 @@ class CacheOrchestrator:
             was_cache_hit=False,
             cache_entry_id=entry_id,
             similarity_score=similarity_score,
-            classifier_score=None,
+            classifier_score=classifier_score,
             cost_saved_usd=Decimal("0"),
             latency_ms=self._elapsed_ms(started_at),
         )
@@ -119,14 +122,61 @@ class CacheOrchestrator:
             total_cost_saved_usd=self.total_cost_saved_usd,
         )
 
-    def _find_baseline_hit(self, query_embedding: np.ndarray) -> tuple[UUID | None, float | None]:
+    def _find_hit(
+        self, query_embedding: FloatVector
+    ) -> tuple[UUID | None, float | None, float | None]:
         candidates = self.embedding_service.search(query_embedding, self.config.candidate_k)
         if not candidates:
-            return None, None
+            return None, None, None
+        if self.classifier_service is not None:
+            return self._find_classifier_hit(query_embedding, candidates)
+        return self._find_baseline_hit(candidates)
+
+    def _find_baseline_hit(
+        self, candidates: list[SearchCandidate]
+    ) -> tuple[UUID | None, float | None, None]:
         best = candidates[0]
         if best.score >= self.config.cosine_threshold:
-            return best.entry_id, best.score
-        return None, best.score
+            return best.entry_id, best.score, None
+        return None, best.score, None
+
+    def _find_classifier_hit(
+        self,
+        query_embedding: FloatVector,
+        candidates: list[SearchCandidate],
+    ) -> tuple[UUID | None, float | None, float | None]:
+        classifier = self.classifier_service
+        if classifier is None:
+            return self._find_baseline_hit(candidates)
+
+        entries = [self.store.get(candidate.entry_id) for candidate in candidates]
+        scored_candidates = [
+            (candidate, entry)
+            for candidate, entry in zip(candidates, entries, strict=True)
+            if entry is not None
+        ]
+        if not scored_candidates:
+            return None, candidates[0].score, None
+
+        probabilities = classifier.predict_batch(
+            [
+                (
+                    query_embedding,
+                    np.asarray(entry.prompt_embedding, dtype=np.float32),
+                )
+                for _, entry in scored_candidates
+            ]
+        )
+        ranked = sorted(
+            zip(scored_candidates, probabilities, strict=True),
+            key=lambda item: item[1],
+            reverse=True,
+        )
+        (best_candidate, _), best_classifier_score = ranked[0]
+        if best_classifier_score >= classifier.threshold:
+            return best_candidate.entry_id, best_candidate.score, best_classifier_score
+        best = candidates[0]
+        return None, best.score, best_classifier_score
 
     async def _call_llm(self, llm_function: LLMFunction, prompt: str) -> str:
         value = llm_function(prompt)
