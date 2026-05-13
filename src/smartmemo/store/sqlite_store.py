@@ -13,8 +13,8 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
-from equivcache.models import CacheEntry, EvictionPolicy
-from equivcache.types import FloatVector
+from smartmemo.models import CacheEntry, EvictionPolicy
+from smartmemo.types import FloatVector
 
 
 def _now() -> datetime:
@@ -51,7 +51,7 @@ class SQLiteCacheStore:
         self._connection.close()
 
     def _ensure_schema(self) -> None:
-        schema = resources.files("equivcache.store").joinpath("schema.sql").read_text()
+        schema = resources.files("smartmemo.store").joinpath("schema.sql").read_text()
         self._connection.executescript(schema)
         self._connection.commit()
 

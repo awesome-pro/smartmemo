@@ -1,13 +1,13 @@
 # Evaluation
 
-EquivCache optimizes for precision before recall. A false negative costs one extra LLM
+SmartMemo optimizes for precision before recall. A false negative costs one extra LLM
 call. A false positive returns the wrong cached answer, which is the production failure
 mode this project is built to avoid.
 
 Evaluate a checkpoint with:
 
 ```bash
-uv run equivcache eval-classifier \
+uv run smartmemo eval-classifier \
   --data data/fixtures/customer_support_pairs.jsonl \
   --model models/classifier-v1.pt \
   --domain customer-support \

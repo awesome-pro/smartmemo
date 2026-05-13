@@ -14,8 +14,8 @@ from tempfile import TemporaryDirectory
 
 import numpy as np
 
-from equivcache import CacheConfig, EquivCache
-from equivcache.types import FloatVector
+from smartmemo import CacheConfig, SmartMemo
+from smartmemo.types import FloatVector
 
 
 class CustomerSupportFixtureEmbeddingProvider:
@@ -81,7 +81,7 @@ SCENARIOS = [
 
 
 async def run_scenario(scenario: dict[str, object], db_path: Path) -> dict[str, object]:
-    cache = EquivCache(
+    cache = SmartMemo(
         domain="customer-support",
         config=CacheConfig(
             db_path=db_path,

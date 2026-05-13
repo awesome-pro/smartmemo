@@ -4,8 +4,8 @@ from uuid import uuid4
 
 import numpy as np
 
-from equivcache.embedding import EmbeddingService, InMemoryVectorIndex
-from equivcache.types import FloatVector
+from smartmemo.embedding import EmbeddingService, InMemoryVectorIndex
+from smartmemo.types import FloatVector
 
 
 class Provider:

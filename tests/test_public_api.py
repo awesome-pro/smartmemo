@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import equivcache
+import smartmemo
 
 
 def test_public_api_exports() -> None:
-    assert equivcache.EquivCache is not None
-    assert equivcache.CacheConfig is not None
-    assert equivcache.CacheResult is not None
-    assert equivcache.CacheStats is not None
-    assert equivcache.CacheEntry is not None
-    assert equivcache.ClassifierConfig is not None
-    assert equivcache.EvictionPolicy is not None
+    assert smartmemo.SmartMemo is not None
+    assert smartmemo.CacheConfig is not None
+    assert smartmemo.CacheResult is not None
+    assert smartmemo.CacheStats is not None
+    assert smartmemo.CacheEntry is not None
+    assert smartmemo.ClassifierConfig is not None
+    assert smartmemo.EvictionPolicy is not None

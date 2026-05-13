@@ -3,16 +3,16 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "equivcache"
-version = "0.1.0"
-description = "Semantic caching for LLM agent calls with an equivalence-first architecture."
+name = "smartmemo"
+version = "0.0.1"
+description = "Semantic memory for LLM agent calls with an equivalence-first cache architecture."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
 license = "MIT"
 authors = [
   { name = "Abhinandan" }
 ]
-keywords = ["llm", "agents", "semantic-cache", "embeddings", "equivalence"]
+keywords = ["llm", "agents", "semantic-cache", "semantic-memory", "embeddings", "equivalence"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -47,17 +47,18 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/abhinandan/equivcache"
-Issues = "https://github.com/abhinandan/equivcache/issues"
+Repository = "https://github.com/awesome-pro/smartmemo"
+Issues = "https://github.com/awesome-pro/smartmemo/issues"
+Changelog = "https://github.com/awesome-pro/smartmemo/blob/main/CHANGELOG.md"
 
 [project.scripts]
-equivcache = "equivcache.cli:main"
+smartmemo = "smartmemo.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/equivcache"]
+packages = ["src/smartmemo"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"src/equivcache/store/schema.sql" = "equivcache/store/schema.sql"
+"src/smartmemo/store/schema.sql" = "smartmemo/store/schema.sql"
 
 [tool.ruff]
 line-length = 100

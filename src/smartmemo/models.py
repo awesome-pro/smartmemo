@@ -1,4 +1,4 @@
-"""Pydantic models for the public EquivCache API."""
+"""Pydantic models for the public SmartMemo API."""
 
 from __future__ import annotations
 
@@ -21,11 +21,11 @@ class EvictionPolicy(StrEnum):
 
 
 class CacheConfig(BaseModel):
-    """Configuration for a local EquivCache instance."""
+    """Configuration for a local SmartMemo instance."""
 
     model_config = ConfigDict(frozen=True)
 
-    db_path: Path = Field(default=Path(".equivcache/cache.db"))
+    db_path: Path = Field(default=Path(".smartmemo/cache.db"))
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = Field(default=384, gt=0)
     candidate_k: int = Field(default=5, gt=0)
@@ -74,7 +74,7 @@ class CacheEntry(BaseModel):
 
 
 class CacheResult(BaseModel):
-    """Result returned by `EquivCache.get_or_call`."""
+    """Result returned by `SmartMemo.get_or_call`."""
 
     query_id: UUID
     response: str

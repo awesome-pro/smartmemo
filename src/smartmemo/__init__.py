@@ -1,7 +1,7 @@
-"""EquivCache public API."""
+"""SmartMemo public API."""
 
-from equivcache.cache import EquivCache
-from equivcache.models import (
+from smartmemo.cache import SmartMemo
+from smartmemo.models import (
     CacheConfig,
     CacheEntry,
     CacheResult,
@@ -16,6 +16,6 @@ __all__ = [
     "CacheResult",
     "CacheStats",
     "ClassifierConfig",
-    "EquivCache",
+    "SmartMemo",
     "EvictionPolicy",
 ]

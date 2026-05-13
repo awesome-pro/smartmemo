@@ -4,9 +4,9 @@ from pathlib import Path
 
 import numpy as np
 
-from equivcache.classifier import ClassifierService, TrainingConfig, train_classifier
-from equivcache.classifier.data import PairRecord
-from equivcache.types import FloatVector
+from smartmemo.classifier import ClassifierService, TrainingConfig, train_classifier
+from smartmemo.classifier.data import PairRecord
+from smartmemo.types import FloatVector
 
 
 class Provider:

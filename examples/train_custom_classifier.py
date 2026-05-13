@@ -1,7 +1,7 @@
 """Train a tiny classifier checkpoint from the seed customer-support fixture.
 
 This example uses HashEmbeddingProvider so it runs without model downloads. Real
-training should use SentenceTransformerEmbeddingProvider via `equivcache[ml]`.
+training should use SentenceTransformerEmbeddingProvider via `smartmemo[ml]`.
 """
 
 from __future__ import annotations
@@ -9,8 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from equivcache.classifier import TrainingConfig, load_pair_records, train_classifier
-from equivcache.embedding import HashEmbeddingProvider
+from smartmemo.classifier import TrainingConfig, load_pair_records, train_classifier
+from smartmemo.embedding import HashEmbeddingProvider
 
 
 def main() -> None:

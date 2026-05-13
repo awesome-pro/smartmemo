@@ -1,6 +1,6 @@
 """Embedding providers and vector indexes."""
 
-from equivcache.embedding.service import (
+from smartmemo.embedding.service import (
     EmbeddingService,
     FaissVectorIndex,
     HashEmbeddingProvider,

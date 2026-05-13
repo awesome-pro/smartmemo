@@ -1,17 +1,17 @@
-# CLAUDE.md — SmartCache Project Guide
+# AGENTS.md — SmartMemo Project Guide
 
-> This document is the single source of truth for the SmartCache project.
+> This document is the single source of truth for the SmartMemo project.
 > Read this fully before writing any code. Every architectural and ML decision is explained here.
 
 ---
 
-## What is SmartCache?
+## What is SmartMemo?
 
-SmartCache is a **semantic caching layer for LLM agent calls** that uses a *learned* equivalence classifier instead of a fixed cosine-similarity threshold.
+SmartMemo is a **semantic caching layer for LLM agent calls** that uses a *learned* equivalence classifier instead of a fixed cosine-similarity threshold.
 
-It sits between an agent and its LLM provider. When the agent makes an LLM call, SmartCache checks if a "semantically equivalent" call has been made before. If yes, it returns the cached response and saves the cost of an actual LLM call. If no, it lets the call through and stores the result for next time.
+It sits between an agent and its LLM provider. When the agent makes an LLM call, SmartMemo checks if a "semantically equivalent" call has been made before. If yes, it returns the cached response and saves the cost of an actual LLM call. If no, it lets the call through and stores the result for next time.
 
-The crucial difference from existing semantic caches (GPTCache, etc.): SmartCache does not trust cosine similarity to decide equivalence. It uses a small ML classifier — finetuned on real agent traces from the specific domain — to make that decision. This eliminates the false-positive failures that have kept production teams from adopting semantic caching.
+The crucial difference from existing semantic caches (GPTCache, etc.): SmartMemo does not trust cosine similarity to decide equivalence. It uses a small ML classifier — finetuned on real agent traces from the specific domain — to make that decision. This eliminates the false-positive failures that have kept production teams from adopting semantic caching.
 
 **One-line pitch:**
 > "Semantic caching for LLM agents that actually works in production — a learned equivalence classifier replaces the naive cosine threshold that causes false-positive failures in GPTCache and similar tools."
@@ -30,7 +30,7 @@ This is not a tunable-threshold problem. There is no threshold that works across
 
 The solution is not a better threshold. The solution is **learning what equivalence means**, per domain, from data.
 
-That is what SmartCache is.
+That is what SmartMemo is.
 
 ---
 
@@ -46,18 +46,18 @@ Cache hits look great on paper (40-60% hit rate). In production, false positives
 
 Teams adopt Option B in development, hit a false-positive incident, rip it out, go back to Option A. The cycle repeats across the industry.
 
-**SmartCache exists because Option C is missing.** Cache hit rates of 60-80% with classifier-validated correctness, measured against a real evaluation suite. That's the gap.
+**SmartMemo exists because Option C is missing.** Cache hit rates of 60-80% with classifier-validated correctness, measured against a real evaluation suite. That's the gap.
 
 ---
 
 ## The Mental Model: A Two-Stage Filter
 
-Think of SmartCache as airport security. You don't search every passenger thoroughly — that would take forever. You also don't let everyone through unscreened — that's unsafe. Instead, you have two stages:
+Think of SmartMemo as airport security. You don't search every passenger thoroughly — that would take forever. You also don't let everyone through unscreened — that's unsafe. Instead, you have two stages:
 
 1. **Metal detector (fast, dumb, high-recall):** flag anyone metallic. Quick to run, catches most candidates, but lots of false alarms.
 2. **Manual screening (slow, smart, high-precision):** examine each flagged passenger carefully. Decide if they're actually a threat.
 
-SmartCache works the same way:
+SmartMemo works the same way:
 
 1. **Embedding similarity (fast filter):** find the top K most similar cached prompts. Quick, O(log N) with a vector index, but doesn't actually decide cache hits.
 2. **Learned classifier (smart judge):** for each candidate, run a small trained model that outputs equivalence probability. This is the actual cache-hit decision.
@@ -68,7 +68,7 @@ The first stage gives you tractability. The second stage gives you correctness. 
 
 ## The Four Core Concepts
 
-Everything in SmartCache fits into one of these. Master them — these are what you'll defend in interviews.
+Everything in SmartMemo fits into one of these. Master them — these are what you'll defend in interviews.
 
 ---
 
@@ -92,7 +92,7 @@ Everything in SmartCache fits into one of these. Master them — these are what 
 
 **What it is:** A small neural network that takes two prompts (or their embeddings) and outputs a single number: the probability that they would produce essentially the same useful response.
 
-**Why it exists:** This is the ML core of SmartCache. It replaces the naive cosine threshold that breaks production semantic caches. The classifier learns what equivalence actually means for a domain, from data.
+**Why it exists:** This is the ML core of SmartMemo. It replaces the naive cosine threshold that breaks production semantic caches. The classifier learns what equivalence actually means for a domain, from data.
 
 **Architecture (v1):**
 
@@ -159,7 +159,7 @@ faiss_index: cache_entries.prompt_embedding ↔ cache_entries.id
 
 **What it is:** A mechanism for the system to learn from its mistakes over time. Bad cache hits become training data for the next classifier retrain.
 
-**Why it exists:** Without this, SmartCache is a static classifier that gets *worse* over time as the domain drifts. With this, it gets *better* — adapting to the specific patterns of the agent it's deployed for.
+**Why it exists:** Without this, SmartMemo is a static classifier that gets *worse* over time as the domain drifts. With this, it gets *better* — adapting to the specific patterns of the agent it's deployed for.
 
 **Feedback sources:**
 - **Explicit:** application calls `cache.report_bad_hit(query_id, reason=...)` after detecting a problem (e.g., agent got a thumbs-down from user)
@@ -172,7 +172,7 @@ faiss_index: cache_entries.prompt_embedding ↔ cache_entries.id
 3. Evaluate the new classifier on a held-out test set. If it's better, deploy. If worse, keep the old one.
 4. Version classifiers — keep the last N for rollback.
 
-**v1 scope:** ship the feedback collection and storage. Make retraining manual via CLI: `smartcache retrain`. Automated retraining is v0.2.
+**v1 scope:** ship the feedback collection and storage. Make retraining manual via CLI: `smartmemo retrain`. Automated retraining is v0.2.
 
 ---
 
@@ -181,7 +181,7 @@ faiss_index: cache_entries.prompt_embedding ↔ cache_entries.id
 Here is a complete cache lookup, end to end:
 
 ```
-agent calls smartcache.get_or_call(prompt, llm_function)
+agent calls smartmemo.get_or_call(prompt, llm_function)
     │
     ▼
 1. embed(prompt) → query_embedding [Concept 1]
@@ -205,18 +205,18 @@ agent calls smartcache.get_or_call(prompt, llm_function)
      return response
     │
     ▼
-5. (later) application calls smartcache.report_bad_hit(query_id) → feedback ledger [Concept 4]
+5. (later) application calls smartmemo.report_bad_hit(query_id) → feedback ledger [Concept 4]
 ```
 
-The agent doesn't need to know any of this exists. SmartCache is a wrapper around the LLM call — same input, same output, just sometimes much cheaper.
+The agent doesn't need to know any of this exists. SmartMemo is a wrapper around the LLM call — same input, same output, just sometimes much cheaper.
 
 ---
 
 ## Public API Surface
 
 ```python
-from smartcache import (
-    SmartCache,
+from smartmemo import (
+    SmartMemo,
     CacheConfig,
     ClassifierConfig,
     CacheStore,
@@ -228,11 +228,11 @@ from smartcache import (
 
 Minimal usage:
 ```python
-from smartcache import SmartCache
+from smartmemo import SmartMemo
 from anthropic import AsyncAnthropic
 
 client = AsyncAnthropic()
-cache = SmartCache(domain="customer-support")
+cache = SmartMemo(domain="customer-support")
 
 async def call_llm(prompt: str) -> str:
     response = await client.messages.create(
@@ -254,7 +254,7 @@ print(result.cost_saved_usd)        # Decimal, 0 if miss
 
 Full usage:
 ```python
-cache = SmartCache(
+cache = SmartMemo(
     domain="customer-support",
     config=CacheConfig(
         embedding_model="sentence-transformers/all-MiniLM-L6-v2",
@@ -288,7 +288,7 @@ print(stats.false_positive_estimate)
 ## Architecture Internals
 
 ```
-smartcache.get_or_call(prompt, llm_function)
+smartmemo.get_or_call(prompt, llm_function)
     │
     ▼
 CacheOrchestrator
@@ -373,7 +373,7 @@ CacheResult:
 
 ## ML Strategy (The Hard Part)
 
-This is what separates SmartCache from a toy. Read carefully.
+This is what separates SmartMemo from a toy. Read carefully.
 
 ### The training data problem
 
@@ -397,7 +397,7 @@ To train the equivalence classifier you need pairs of prompts labeled as equival
 - Most expensive but produces the most defensible labels
 
 **Source 4: Feedback loop (for continual improvement)**
-- Once SmartCache is deployed, every reported bad hit becomes a labeled negative example
+- Once SmartMemo is deployed, every reported bad hit becomes a labeled negative example
 - Every successful hit (no bad feedback within a time window) becomes a labeled positive
 - This is how the classifier improves *for the specific domain over time*
 
@@ -417,7 +417,7 @@ For v1, mix sources 1 and 2: bootstrap with self-supervised, refine the hard cas
 - **False positive rate (estimated):** fraction of cache hits that get bad feedback within N minutes
 - **Latency impact:** median and p99 latency with vs without cache
 
-**Critical evaluation principle:** **precision matters more than recall for SmartCache.** A false negative just makes one extra LLM call (small cost). A false positive returns wrong data to the agent (potentially big cost — user trust, incorrect actions). Tune threshold to favor precision unless the domain explicitly tolerates errors.
+**Critical evaluation principle:** **precision matters more than recall for SmartMemo.** A false negative just makes one extra LLM call (small cost). A false positive returns wrong data to the agent (potentially big cost — user trust, incorrect actions). Tune threshold to favor precision unless the domain explicitly tolerates errors.
 
 ### Cold start
 
@@ -433,11 +433,11 @@ For v1, ship a generic pretrained classifier. Document the cold-start tradeoff. 
 ## Project Structure
 
 ```
-smartcache/
+smartmemo/
 ├── src/
-│   └── smartcache/
+│   └── smartmemo/
 │       ├── __init__.py                # public API
-│       ├── cache.py                   # SmartCache main class
+│       ├── cache.py                   # SmartMemo main class
 │       ├── orchestrator.py            # CacheOrchestrator
 │       ├── embedding/
 │       │   ├── __init__.py
@@ -462,11 +462,11 @@ smartcache/
 │       ├── stats.py                   # StatsCollector
 │       ├── models.py                  # Pydantic data models (CacheResult, etc)
 │       ├── exceptions.py
-│       └── cli.py                     # `smartcache retrain`, `smartcache stats`
+│       └── cli.py                     # `smartmemo retrain`, `smartmemo stats`
 ├── examples/
 │   ├── basic_usage.py                 # wrap an LLM call, see hit rate
-│   ├── with_agentruntime.py           # SmartCache + AgentRuntime cost demo
-│   ├── with_orchflow.py               # SmartCache in a multi-step pipeline
+│   ├── with_agentruntime.py           # SmartMemo + AgentRuntime cost demo
+│   ├── with_orchflow.py               # SmartMemo in a multi-step pipeline
 │   ├── train_custom_classifier.py     # finetune on your domain
 │   └── feedback_loop.py               # reporting bad hits, retraining
 ├── benchmarks/
@@ -514,7 +514,7 @@ Get a working semantic cache without the classifier — i.e., GPTCache-equivalen
 2. `store/sqlite_store.py` — schema, CRUD, eviction
 3. `models.py` — `CacheResult`, `CacheConfig`, `CacheEntry`
 4. `orchestrator.py` — `get_or_call()` using cosine threshold (no classifier yet)
-5. `cache.py` — `SmartCache` public class
+5. `cache.py` — `SmartMemo` public class
 6. `examples/basic_usage.py` — wrap a Claude/OpenAI call, run 100 similar queries, see hit rate
 7. Tests for embedding, store, basic cache flow
 
@@ -545,7 +545,7 @@ Wire the classifier into the cache flow.
 4. Benchmark: cache hit rate and false positive rate vs. baseline
 5. Tests for classifier integration, threshold behavior
 
-**Done when:** SmartCache with classifier shows higher precision than cosine baseline on the same workload. RunResult includes `classifier_score`.
+**Done when:** SmartMemo with classifier shows higher precision than cosine baseline on the same workload. RunResult includes `classifier_score`.
 
 ### Phase 4 — Feedback Loop (Week 6)
 Add the learning system.
@@ -553,7 +553,7 @@ Add the learning system.
 1. `feedback/ledger.py` — append-only event log
 2. `cache.report_bad_hit()`, `cache.report_good_hit()` public methods
 3. Implicit feedback detection: same prompt re-issued within N seconds after a hit → auto bad-flag
-4. `feedback/retrain.py` — CLI command `smartcache retrain` reads feedback, retrains classifier, evaluates, deploys if better
+4. `feedback/retrain.py` — CLI command `smartmemo retrain` reads feedback, retrains classifier, evaluates, deploys if better
 5. `examples/feedback_loop.py` — simulate user feedback, retrain, show improvement
 6. Tests for ledger, retrain flow
 
@@ -568,12 +568,12 @@ This is the portfolio-coherence phase.
 4. `benchmarks/false_positive_eval.py` — the killer demo (medical/legal/finance prompts where cosine fails badly and classifier catches it)
 5. Document the killer demos in README with screenshots
 
-**Done when:** you can run a single command that demonstrates SmartCache + AgentRuntime + orchflow producing measurably cheaper runs than the same agent without caching.
+**Done when:** you can run a single command that demonstrates SmartMemo + AgentRuntime + orchflow producing measurably cheaper runs than the same agent without caching.
 
 ### Phase 6 — Polish & Ship (Week 8)
 1. Full documentation site (quickstart, concepts, ML internals, API)
 2. README with GIFs/screenshots — focus on the false-positive demo and the cost-savings demo
-3. PyPI publish: `pip install smartcache`
+3. PyPI publish: `pip install smartmemo`
 4. Blog post: "Why naive semantic caching fails in production (and what to do instead)"
 5. LinkedIn series — one post per concept (embedding filter, classifier, feedback loop)
 6. A talk-style write-up for the technical depth: "Training an equivalence classifier for LLM caches"
@@ -586,9 +586,9 @@ This is the portfolio-coherence phase.
 
 **2. Precision over recall.** False positives are the failure mode that matters. A cache miss costs one LLM call. A false-positive hit returns wrong data to the agent. Default thresholds favor precision.
 
-**3. Domain-specific by design.** SmartCache instances are tied to a domain. The classifier is finetuned per domain. Don't try to build "one classifier for all use cases" — that's exactly what cosine similarity already is, badly.
+**3. Domain-specific by design.** SmartMemo instances are tied to a domain. The classifier is finetuned per domain. Don't try to build "one classifier for all use cases" — that's exactly what cosine similarity already is, badly.
 
-**4. Feedback is a first-class citizen.** The library has APIs and ledger storage for feedback from day one. You can't bolt this on later — it's the difference between SmartCache and "a classifier that sits in front of a cache."
+**4. Feedback is a first-class citizen.** The library has APIs and ledger storage for feedback from day one. You can't bolt this on later — it's the difference between SmartMemo and "a classifier that sits in front of a cache."
 
 **5. Ship a useful pretrained classifier.** Cold start matters. New users should get value on day one. Train a generic classifier on diverse data, ship it, document its limitations.
 
@@ -596,7 +596,7 @@ This is the portfolio-coherence phase.
 
 **7. Standard tooling.** PyTorch for the classifier, sentence-transformers for embeddings, FAISS for vector search, SQLite for storage. No exotic choices. Senior engineers should be able to read your code and immediately understand the stack.
 
-**8. Composability with your other libraries.** SmartCache wraps LLM calls. AgentRuntime wraps agents. Orchflow orchestrates steps. Agenteval tests outputs. The four compose. Examples demonstrate this explicitly.
+**8. Composability with your other libraries.** SmartMemo wraps LLM calls. AgentRuntime wraps agents. Orchflow orchestrates steps. Agenteval tests outputs. The four compose. Examples demonstrate this explicitly.
 
 ---
 
@@ -626,10 +626,10 @@ ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
 
 # Optional config
-SMARTCACHE_DB_PATH=./smartcache.db
-SMARTCACHE_MODEL_PATH=./models/classifier-v1.pt
-SMARTCACHE_LOG_LEVEL=INFO
-SMARTCACHE_DEVICE=cpu                  # or "cuda" for GPU inference
+SMARTMEMO_DB_PATH=./smartmemo.db
+SMARTMEMO_MODEL_PATH=./models/classifier-v1.pt
+SMARTMEMO_LOG_LEVEL=INFO
+SMARTMEMO_DEVICE=cpu                  # or "cuda" for GPU inference
 ```
 
 ---
@@ -639,7 +639,7 @@ SMARTCACHE_DEVICE=cpu                  # or "cuda" for GPU inference
 Memorize these — they're the project in interview form.
 
 **Q: Why not just use GPTCache?**
-A: GPTCache uses a fixed cosine similarity threshold. Cosine similarity isn't equivalence — "should I accept this meeting" and "should I reject this meeting" are 97% similar by cosine but require opposite responses. The fixed threshold causes false-positive cache hits in production. SmartCache replaces the threshold with a learned classifier that's finetuned per domain, eliminating the false-positive failure mode.
+A: GPTCache uses a fixed cosine similarity threshold. Cosine similarity isn't equivalence — "should I accept this meeting" and "should I reject this meeting" are 97% similar by cosine but require opposite responses. The fixed threshold causes false-positive cache hits in production. SmartMemo replaces the threshold with a learned classifier that's finetuned per domain, eliminating the false-positive failure mode.
 
 **Q: How is the classifier trained?**
 A: Pairs of prompts labeled as equivalent or not. Positive examples from paraphrasing (use an LLM to rewrite prompts while preserving intent). Negative examples from random pairing. Hard cases (mid-range cosine similarity) get LLM-as-judge labels for quality. Once deployed, user feedback on bad cache hits produces additional negative examples for continual retraining.
@@ -657,7 +657,7 @@ A: Ship a generic pretrained classifier trained on diverse cross-domain data. De
 A: A false negative (missed cache hit) costs one extra LLM call — small money. A false positive (wrong cache hit) returns wrong data to the agent — potentially big user-trust cost, possibly safety-relevant. The asymmetry of error costs argues for precision-first tuning. We document this and let users adjust.
 
 **Q: How does this compose with the rest of your stack?**
-A: AgentRuntime tracks cost — SmartCache demonstrably reduces it. Agenteval tests agent behavior — we use it to validate that SmartCache doesn't introduce regressions. Orchflow orchestrates multi-agent pipelines — SmartCache wraps the LLM calls in each step, with savings compounding across steps.
+A: AgentRuntime tracks cost — SmartMemo demonstrably reduces it. Agenteval tests agent behavior — we use it to validate that SmartMemo doesn't introduce regressions. Orchflow orchestrates multi-agent pipelines — SmartMemo wraps the LLM calls in each step, with savings compounding across steps.
 
 **Q: Is this really ML, or is it just engineering?**
 A: It's both. The engineering — vector indexing, caching, feedback loops — is necessary infrastructure. The ML — training a pair classifier with proper dataset construction, evaluation, calibration, and continual learning — is the core contribution. Without the ML, this is GPTCache. The ML is what makes it production-trustworthy.
@@ -668,8 +668,8 @@ A: It's both. The engineering — vector indexing, caching, feedback loops — i
 
 A developer should be able to:
 
-1. `pip install smartcache`
-2. Wrap their existing LLM call site with `smartcache.get_or_call()`
+1. `pip install smartmemo`
+2. Wrap their existing LLM call site with `smartmemo.get_or_call()`
 3. Run their workload and see cost savings within an hour
 4. Trust the cache because the classifier blocks the false positives that would break GPTCache
 5. Optionally provide feedback and retrain to make the cache better for their domain over time
@@ -682,4 +682,4 @@ That's the bar.
 
 ## The One-Paragraph Pitch
 
-*"Semantic caches for LLM agents have a fatal flaw — cosine similarity treats 'should I accept?' and 'should I reject?' as equivalent, causing false-positive hits that return wrong responses in production. SmartCache replaces the naive threshold with a small learned classifier, finetuned per domain on real agent traces, that decides equivalence based on intent rather than surface similarity. The result is 60-80% cache hit rates with measurable correctness guarantees — the missing piece between 'GPTCache exists' and 'agent teams actually trust it in production.'"*
+*"Semantic caches for LLM agents have a fatal flaw — cosine similarity treats 'should I accept?' and 'should I reject?' as equivalent, causing false-positive hits that return wrong responses in production. SmartMemo replaces the naive threshold with a small learned classifier, finetuned per domain on real agent traces, that decides equivalence based on intent rather than surface similarity. The result is 60-80% cache hit rates with measurable correctness guarantees — the missing piece between 'GPTCache exists' and 'agent teams actually trust it in production.'"*
