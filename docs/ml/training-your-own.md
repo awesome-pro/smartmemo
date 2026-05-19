@@ -48,5 +48,28 @@ The query prompt is paired with the cached prompt that was reused. Cached respon
 duplicated in the feedback export.
 
 The exported file uses the same format as other classifier datasets, so it can be passed
-directly to `smartmemo train-classifier`. This step prepares training data only; automated
-retraining, evaluation gates, and model deployment are intentionally left to a later phase.
+directly to `smartmemo train-classifier`.
+
+## Manual Retraining From Feedback
+
+For an auditable feedback loop, use `smartmemo retrain`:
+
+```bash
+uv run smartmemo --db-path .smartmemo/cache.db retrain \
+  --out models/classifier-candidate.pt \
+  --validation-data data/validation_pairs.jsonl \
+  --seed-data data/fixtures/customer_support_pairs.jsonl \
+  --domain customer-support \
+  --threshold 0.85 \
+  --min-precision 0.95 \
+  --min-recall 0.0 \
+  --promote-to models/classifier-active.pt
+```
+
+The command loads feedback-derived pairs from the cache database, appends optional seed
+training records, trains a candidate checkpoint, evaluates it on held-out validation data,
+and writes `<checkpoint>.report.json`. If `--promote-to` is provided, the candidate is
+copied to that path only when the configured gates pass.
+
+This is intentionally an operator-controlled workflow. SmartMemo does not run background
+training, auto-promote failed candidates, or hot-reload classifiers in running processes.

@@ -15,6 +15,7 @@ The current implementation ships the baseline and the first classifier-gated cac
 - measured cosine-baseline benchmark fixtures for customer-support prompts
 - classifier training, evaluation, checkpoint inference, and optional classifier-gated hits
 - durable feedback export for classifier retraining data
+- manual feedback-driven retraining with validation gates and checkpoint promotion
 
 By default, SmartMemo keeps the lightweight cosine baseline. When you provide a classifier
 checkpoint, cosine search becomes the candidate selector and the learned classifier makes
@@ -114,18 +115,35 @@ print(written)
 ```
 
 The exported JSONL uses the same prompt-pair shape accepted by `smartmemo train-classifier`.
-Feedback export is manual training data preparation; SmartMemo does not automatically retrain
-or deploy classifiers yet.
+
+## Manual Retraining
+
+Use `smartmemo retrain` to turn durable feedback into a candidate classifier checkpoint:
+
+```bash
+uv run smartmemo --db-path .smartmemo/cache.db retrain \
+  --out models/classifier-candidate.pt \
+  --validation-data data/validation_pairs.jsonl \
+  --seed-data data/fixtures/customer_support_pairs.jsonl \
+  --domain customer-support \
+  --min-precision 0.95 \
+  --promote-to models/classifier-active.pt
+```
+
+The command always trains a candidate and writes an auditable
+`<checkpoint>.report.json`. Promotion only copies the candidate to `--promote-to` when the
+validation gates pass. SmartMemo does not run background retraining or automatically reload
+classifiers at runtime.
 
 ## Release
 
-Version `0.0.3` is configured for PyPI as `smartmemo`. The repository publishes through
+Version `0.0.4` is configured for PyPI as `smartmemo`. The repository publishes through
 GitHub Actions trusted publishing from `.github/workflows/publish-pypi.yml` with the
 `pypi` environment.
 
 ```bash
-git tag v0.0.3
-git push origin v0.0.3
+git tag v0.0.4
+git push origin v0.0.4
 ```
 
 That tag builds the source distribution and wheel, then uploads them to PyPI.

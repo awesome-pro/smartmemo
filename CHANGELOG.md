@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.4
+
+- Add `smartmemo retrain` for manual feedback-to-checkpoint retraining.
+- Add `smartmemo.feedback.retrain_from_feedback(...)` with auditable retrain reports.
+- Support optional seed data, validation gates, and checkpoint promotion when gates pass.
+- Document the manual feedback loop from collection through deliberate classifier promotion.
+
 ## 0.0.3
 
 - Add durable lookup records for cache hits so feedback can be exported later.

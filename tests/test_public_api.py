@@ -13,3 +13,6 @@ def test_public_api_exports() -> None:
     assert smartmemo.EvictionPolicy is not None
     assert smartmemo.FeedbackEvent is not None
     assert smartmemo.LookupRecord is not None
+    assert smartmemo.RetrainConfig is not None
+    assert smartmemo.RetrainResult is not None
+    assert smartmemo.retrain_from_feedback is not None

@@ -58,6 +58,18 @@ if result.was_cache_hit:
 cache.export_feedback_pairs("data/feedback_pairs.jsonl")
 ```
 
-The exported file can be passed to `smartmemo train-classifier`. This is a manual feedback
-loop: SmartMemo stores and exports the training signal, but it does not retrain or deploy
-new classifiers automatically yet.
+Manual retraining:
+
+```bash
+uv run smartmemo --db-path .smartmemo/cache.db retrain \
+  --out models/classifier-candidate.pt \
+  --validation-data data/validation_pairs.jsonl \
+  --seed-data data/fixtures/customer_support_pairs.jsonl \
+  --domain customer-support \
+  --min-precision 0.95 \
+  --promote-to models/classifier-active.pt
+```
+
+The retrain command trains a candidate checkpoint and writes a report next to it. It only
+promotes the checkpoint when validation gates pass; runtime classifier loading remains an
+explicit `ClassifierConfig(model_path=...)` choice.

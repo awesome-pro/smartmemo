@@ -1,6 +1,7 @@
 """SmartMemo public API."""
 
 from smartmemo.cache import SmartMemo
+from smartmemo.feedback import RetrainConfig, RetrainResult, retrain_from_feedback
 from smartmemo.models import (
     CacheConfig,
     CacheEntry,
@@ -22,4 +23,7 @@ __all__ = [
     "EvictionPolicy",
     "FeedbackEvent",
     "LookupRecord",
+    "RetrainConfig",
+    "RetrainResult",
+    "retrain_from_feedback",
 ]
