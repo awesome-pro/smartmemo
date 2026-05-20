@@ -1,0 +1,52 @@
+{
+  "classifier": {
+    "accuracy": 0.9047619047619048,
+    "auc_roc": 0.9665246500304321,
+    "examples": 84,
+    "expected_calibration_error": 0.140466042334679,
+    "f1": 0.875,
+    "false_negatives": 3,
+    "false_positives": 5,
+    "precision": 0.8484848484848485,
+    "recall": 0.9032258064516129,
+    "threshold": 0.95,
+    "true_negatives": 48,
+    "true_positives": 28
+  },
+  "cosine_at_classifier_recall": {
+    "accuracy": 0.6666666666666666,
+    "auc_roc": 0.790626902008521,
+    "examples": 84,
+    "expected_calibration_error": 0.2644111977202729,
+    "f1": 0.6666666666666666,
+    "false_negatives": 3,
+    "false_positives": 25,
+    "precision": 0.5283018867924528,
+    "recall": 0.9032258064516129,
+    "target_recall": 0.9032258064516129,
+    "threshold": 0.73,
+    "true_negatives": 28,
+    "true_positives": 28
+  },
+  "cosine_default": {
+    "accuracy": 0.7023809523809523,
+    "auc_roc": 0.790626902008521,
+    "examples": 84,
+    "expected_calibration_error": 0.2644111977202729,
+    "f1": 0.4897959183673469,
+    "false_negatives": 19,
+    "false_positives": 6,
+    "precision": 0.6666666666666666,
+    "recall": 0.3870967741935484,
+    "threshold": 0.9,
+    "true_negatives": 47,
+    "true_positives": 12
+  },
+  "examples": 84,
+  "gate_passed": true,
+  "gold_path": "/Users/abhinandan/Desktop/smartcache/data/gold/equivalence_gold.jsonl",
+  "model_path": "/Users/abhinandan/Desktop/smartcache/src/smartmemo/_models/classifier-v1.pt",
+  "negatives": 53,
+  "positives": 31,
+  "precision_gain_at_equal_recall": 0.3201829616923957
+}

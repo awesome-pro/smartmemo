@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0
+
+- Ship `classifier-v1`, a pretrained generic equivalence classifier, inside the package.
+- Add `ClassifierConfig.bundled()` for opt-in, zero-training classifier-gated caching.
+- Add `scripts/generate_training_data.py`: a local-LLM (Ollama) paraphrase and templated
+  hard-negative training-data pipeline, with a committed 10,800-pair dataset.
+- Add a hand-curated 84-pair equivalence gold test set under `data/gold/`.
+- Add `scripts/train_classifier_v1.py` and `benchmarks/classifier_vs_cosine.py`:
+  `classifier-v1` beats the cosine baseline by +32 precision points at equal recall on
+  the gold set.
+- Document that the optional `[ml]` dependencies (PyTorch, FAISS, SentenceTransformers)
+  are required to import smartmemo.
+
 ## 0.0.4
 
 - Add `smartmemo retrain` for manual feedback-to-checkpoint retraining.

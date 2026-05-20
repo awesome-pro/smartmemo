@@ -1,0 +1,73 @@
+{"domain": "customer-support", "object": "the customer's refund request", "action_a": "Approve", "action_b": "Deny"}
+{"domain": "customer-support", "object": "this support ticket", "action_a": "Escalate", "action_b": "Close"}
+{"domain": "customer-support", "object": "the customer's subscription", "action_a": "Cancel", "action_b": "Renew"}
+{"domain": "customer-support", "object": "the customer's account", "action_a": "Suspend", "action_b": "Reactivate"}
+{"domain": "customer-support", "object": "the warranty claim", "action_a": "Accept", "action_b": "Reject"}
+{"domain": "customer-support", "object": "the customer's discount request", "action_a": "Grant", "action_b": "Decline"}
+{"domain": "customer-support", "object": "the disputed charge", "action_a": "Refund", "action_b": "Uphold"}
+{"domain": "customer-support", "object": "this complaint", "action_a": "Prioritize", "action_b": "Deprioritize"}
+{"domain": "software-engineering", "object": "this pull request", "action_a": "Approve", "action_b": "Reject"}
+{"domain": "software-engineering", "object": "the feature flag", "action_a": "Enable", "action_b": "Disable"}
+{"domain": "software-engineering", "object": "this dependency", "action_a": "Add", "action_b": "Remove"}
+{"domain": "software-engineering", "object": "the failing test", "action_a": "Fix", "action_b": "Skip"}
+{"domain": "software-engineering", "object": "this branch", "action_a": "Merge", "action_b": "Delete"}
+{"domain": "software-engineering", "object": "this code change", "action_a": "Keep", "action_b": "Revert"}
+{"domain": "software-engineering", "object": "the rate limiter", "action_a": "Enable", "action_b": "Disable"}
+{"domain": "software-engineering", "object": "the legacy module", "action_a": "Keep", "action_b": "Delete"}
+{"domain": "scheduling", "object": "the 2pm meeting", "action_a": "Confirm", "action_b": "Cancel"}
+{"domain": "scheduling", "object": "the team standup", "action_a": "Schedule", "action_b": "Skip"}
+{"domain": "scheduling", "object": "this calendar invite", "action_a": "Accept", "action_b": "Decline"}
+{"domain": "scheduling", "object": "the project deadline", "action_a": "Extend", "action_b": "Move up"}
+{"domain": "scheduling", "object": "the recurring sync", "action_a": "Keep", "action_b": "Remove"}
+{"domain": "scheduling", "object": "my afternoon appointment", "action_a": "Reschedule", "action_b": "Keep"}
+{"domain": "scheduling", "object": "the client call", "action_a": "Book", "action_b": "Postpone"}
+{"domain": "scheduling", "object": "the holiday on the calendar", "action_a": "Add", "action_b": "Remove"}
+{"domain": "data-analysis", "object": "the outlier rows", "action_a": "Include", "action_b": "Exclude"}
+{"domain": "data-analysis", "object": "the partial month's data", "action_a": "Include", "action_b": "Exclude"}
+{"domain": "data-analysis", "object": "the duplicate records", "action_a": "Keep", "action_b": "Drop"}
+{"domain": "data-analysis", "object": "the null values", "action_a": "Fill", "action_b": "Drop"}
+{"domain": "data-analysis", "object": "this metric", "action_a": "Highlight", "action_b": "Hide"}
+{"domain": "data-analysis", "object": "the new column", "action_a": "Add", "action_b": "Drop"}
+{"domain": "data-analysis", "object": "the forecast", "action_a": "Raise", "action_b": "Lower"}
+{"domain": "data-analysis", "object": "the customer segment", "action_a": "Expand", "action_b": "Narrow"}
+{"domain": "devops", "object": "the latest release", "action_a": "Deploy", "action_b": "Roll back"}
+{"domain": "devops", "object": "the production database", "action_a": "Back up", "action_b": "Restore"}
+{"domain": "devops", "object": "the web service", "action_a": "Scale up", "action_b": "Scale down"}
+{"domain": "devops", "object": "this server", "action_a": "Start", "action_b": "Stop"}
+{"domain": "devops", "object": "this inbound traffic", "action_a": "Allow", "action_b": "Block"}
+{"domain": "devops", "object": "the staging environment", "action_a": "Keep", "action_b": "Tear down"}
+{"domain": "devops", "object": "the nightly cron job", "action_a": "Enable", "action_b": "Disable"}
+{"domain": "devops", "object": "the pager alert", "action_a": "Acknowledge", "action_b": "Mute"}
+{"domain": "general-qa", "object": "the proposal", "action_a": "Approve", "action_b": "Reject"}
+{"domain": "general-qa", "object": "the contract", "action_a": "Sign", "action_b": "Decline"}
+{"domain": "general-qa", "object": "the budget increase", "action_a": "Approve", "action_b": "Reject"}
+{"domain": "general-qa", "object": "the gym membership", "action_a": "Renew", "action_b": "Cancel"}
+{"domain": "general-qa", "object": "the policy change", "action_a": "Support", "action_b": "Oppose"}
+{"domain": "general-qa", "object": "the loan application", "action_a": "Approve", "action_b": "Deny"}
+{"domain": "general-qa", "object": "the job offer", "action_a": "Accept", "action_b": "Decline"}
+{"domain": "general-qa", "object": "the event invitation", "action_a": "Confirm", "action_b": "Decline"}
+{"domain": "customer-support", "object": "the customer's refund request", "action_a": "Draft a reply approving", "action_b": "Draft a reply denying"}
+{"domain": "customer-support", "object": "the damaged item", "action_a": "Send a message confirming we will replace", "action_b": "Send a message refusing to replace"}
+{"domain": "customer-support", "object": "the late fee", "action_a": "Write an email telling the customer we will waive", "action_b": "Write an email telling the customer we will keep"}
+{"domain": "customer-support", "object": "this billing complaint", "action_a": "Update the ticket to escalate", "action_b": "Update the ticket to close"}
+{"domain": "customer-support", "object": "the trial period", "action_a": "Reply to the customer agreeing to extend", "action_b": "Reply to the customer refusing to extend"}
+{"domain": "software-engineering", "object": "the caching layer", "action_a": "Open a pull request to add", "action_b": "Open a pull request to remove"}
+{"domain": "software-engineering", "object": "debug logging", "action_a": "Change the config to enable", "action_b": "Change the config to disable"}
+{"domain": "software-engineering", "object": "the users table", "action_a": "Write a migration that creates", "action_b": "Write a migration that drops"}
+{"domain": "software-engineering", "object": "this code change", "action_a": "Leave a review approving", "action_b": "Leave a review rejecting"}
+{"domain": "scheduling", "object": "the Friday design review", "action_a": "Send a note confirming", "action_b": "Send a note cancelling"}
+{"domain": "scheduling", "object": "the partner meeting", "action_a": "Reply to the invite accepting", "action_b": "Reply to the invite declining"}
+{"domain": "scheduling", "object": "the sprint", "action_a": "Update the calendar to extend", "action_b": "Update the calendar to shorten"}
+{"domain": "scheduling", "object": "my attendance", "action_a": "Reply to the organizer confirming", "action_b": "Reply to the organizer cancelling"}
+{"domain": "data-analysis", "object": "weekend traffic", "action_a": "Adjust the query to include", "action_b": "Adjust the query to exclude"}
+{"domain": "data-analysis", "object": "the churn spike", "action_a": "Update the report to highlight", "action_b": "Update the report to omit"}
+{"domain": "data-analysis", "object": "rows with missing values", "action_a": "Change the pipeline to keep", "action_b": "Change the pipeline to drop"}
+{"domain": "data-analysis", "object": "internal test accounts", "action_a": "Modify the dashboard to show", "action_b": "Modify the dashboard to hide"}
+{"domain": "devops", "object": "the latest build", "action_a": "Update the pipeline to deploy", "action_b": "Update the pipeline to roll back"}
+{"domain": "devops", "object": "the worker pool", "action_a": "Change the config to scale up", "action_b": "Change the config to scale down"}
+{"domain": "devops", "object": "traffic from this IP range", "action_a": "Edit the firewall to allow", "action_b": "Edit the firewall to block"}
+{"domain": "devops", "object": "the nightly job", "action_a": "Write a script that starts", "action_b": "Write a script that stops"}
+{"domain": "general-qa", "object": "the proposed policy", "action_a": "Write a paragraph arguing in favor of", "action_b": "Write a paragraph arguing against"}
+{"domain": "general-qa", "object": "the job offer", "action_a": "Draft a response accepting", "action_b": "Draft a response declining"}
+{"domain": "general-qa", "object": "the loan application", "action_a": "Compose a letter approving", "action_b": "Compose a letter rejecting"}
+{"domain": "general-qa", "object": "the merger", "action_a": "Give reasons to support", "action_b": "Give reasons to oppose"}

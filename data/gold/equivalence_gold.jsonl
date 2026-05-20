@@ -1,0 +1,84 @@
+{"domain": "customer-support", "label": 1, "prompt_a": "Summarize the customer's last three billing tickets.", "prompt_b": "Give me a short recap of the customer's three most recent billing support tickets.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 1, "prompt_a": "Draft a polite reply approving the customer's refund request.", "prompt_b": "Write a courteous message telling the customer their refund has been approved.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 1, "prompt_a": "Explain how the customer can reset their account password.", "prompt_b": "Send password reset instructions to the customer.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 1, "prompt_a": "Escalate this angry customer's billing issue to a senior support specialist.", "prompt_b": "Route this frustrated customer's billing complaint to senior support.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 1, "prompt_a": "Summarize the open shipping-delay complaint for the support agent.", "prompt_b": "Create a brief summary of the unresolved shipping delay complaint.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 1, "prompt_a": "Ask the customer for a screenshot of the checkout error.", "prompt_b": "Request a screenshot showing the checkout error from the customer.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Draft a polite reply approving the customer's refund request.", "prompt_b": "Draft a polite reply denying the customer's refund request.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Cancel the customer's subscription at the end of the month.", "prompt_b": "Convince the customer to keep their subscription with a discount.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Explain how the customer can reset their account password.", "prompt_b": "Delete the customer's account and confirm completion.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Change the customer's billing address to the address in the latest ticket.", "prompt_b": "Change the customer's shipping address to the address in the latest ticket.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Offer a replacement item for the damaged package.", "prompt_b": "Refuse to replace the damaged package.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Approve a one-time courtesy credit for the late delivery.", "prompt_b": "Reject a one-time courtesy credit for the late delivery.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Summarize this customer's latest billing ticket.", "prompt_b": "Write a Dockerfile for a Python web service.", "source": "manual-gold", "split": "test"}
+{"domain": "customer-support", "label": 0, "prompt_a": "Classify the sentiment of this customer review.", "prompt_b": "Find a one-hour meeting slot next Tuesday afternoon.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 1, "prompt_a": "Explain what this Python function does.", "prompt_b": "Describe the behavior of this Python function.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 1, "prompt_a": "Write a unit test for the add function.", "prompt_b": "Create a test case that covers the add function.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 1, "prompt_a": "Convert this callback-based code to async and await.", "prompt_b": "Rewrite this callback-based code using async and await.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 1, "prompt_a": "Find the time complexity of this sorting algorithm.", "prompt_b": "What is the Big-O complexity of this sorting algorithm?", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 1, "prompt_a": "Refactor this loop to use a list comprehension.", "prompt_b": "Rewrite this loop as a list comprehension.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Approve this pull request.", "prompt_b": "Reject this pull request.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Enable the feature flag.", "prompt_b": "Disable the feature flag.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Merge this branch into main.", "prompt_b": "Delete this branch.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Add the new dependency to the project.", "prompt_b": "Remove the dependency from the project.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Fix the failing test.", "prompt_b": "Skip the failing test.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Write a unit test for the add function.", "prompt_b": "Explain how photosynthesis works.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Review this pull request for potential bugs.", "prompt_b": "Calculate the average revenue per customer from this table.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Write a regular expression that matches a phone number.", "prompt_b": "Reschedule the standup to 10am tomorrow.", "source": "manual-gold", "split": "test"}
+{"domain": "software-engineering", "label": 0, "prompt_a": "Document the parameters of this API endpoint.", "prompt_b": "Recommend a book about negotiation.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 1, "prompt_a": "Reschedule the standup to 10am tomorrow.", "prompt_b": "Move tomorrow's standup to 10am.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 1, "prompt_a": "Check whether I am free at 3pm on Thursday.", "prompt_b": "Am I available at 3pm on Thursday?", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 1, "prompt_a": "Find a one-hour meeting slot next Tuesday afternoon.", "prompt_b": "Look for a free 60-minute window next Tuesday afternoon.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 1, "prompt_a": "Cancel my 2pm appointment and notify the attendees.", "prompt_b": "Call off my 2pm appointment and let the attendees know.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 1, "prompt_a": "List all meetings on my calendar for this week.", "prompt_b": "Show me every meeting on my calendar this week.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Confirm the 2pm meeting.", "prompt_b": "Cancel the 2pm meeting.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Accept this calendar invite.", "prompt_b": "Decline this calendar invite.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Extend the project deadline.", "prompt_b": "Move up the project deadline.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Schedule the team standup for tomorrow.", "prompt_b": "Skip the team standup tomorrow.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Book the client call for Friday.", "prompt_b": "Postpone the client call.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Find a one-hour meeting slot next Tuesday afternoon.", "prompt_b": "Write a Dockerfile for a Python web service.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Reschedule the standup to 10am tomorrow.", "prompt_b": "Explain the difference between weather and climate.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Send a calendar invite to the design team for Friday.", "prompt_b": "Detect any outliers in this set of response times.", "source": "manual-gold", "split": "test"}
+{"domain": "scheduling", "label": 0, "prompt_a": "Set a reminder for the project deadline next Monday.", "prompt_b": "Translate this support reply into Spanish.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 1, "prompt_a": "Calculate the average revenue per customer from this table.", "prompt_b": "Compute the mean revenue for each customer in this table.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 1, "prompt_a": "Identify the top five products by total sales.", "prompt_b": "Which five products have the highest total sales?", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 1, "prompt_a": "Write a SQL query that counts active users per region.", "prompt_b": "Give me SQL that returns the active user count for each region.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 1, "prompt_a": "Compute the month-over-month growth rate.", "prompt_b": "Calculate how much things grew compared to the previous month.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 1, "prompt_a": "Detect any outliers in this set of response times.", "prompt_b": "Find anomalous values in this set of response times.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Include the outlier rows in the analysis.", "prompt_b": "Exclude the outlier rows from the analysis.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Fill the null values in this column.", "prompt_b": "Drop the null values in this column.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Keep the duplicate records.", "prompt_b": "Drop the duplicate records.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Raise the forecast for next quarter.", "prompt_b": "Lower the forecast for next quarter.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Expand the customer segment.", "prompt_b": "Narrow the customer segment.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Calculate the average revenue per customer from this table.", "prompt_b": "Write a health-check endpoint for a Flask app.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Identify the top five products by total sales.", "prompt_b": "Explain how a hash table works.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Group these transactions by category and sum the amounts.", "prompt_b": "Draft a polite reply asking the customer for their order number.", "source": "manual-gold", "split": "test"}
+{"domain": "data-analysis", "label": 0, "prompt_a": "Find the correlation between price and units sold.", "prompt_b": "Set up log rotation for the application logs.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 1, "prompt_a": "Explain why this deployment is failing.", "prompt_b": "Diagnose the cause of this failed deployment.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 1, "prompt_a": "Write a Dockerfile for a Python web service.", "prompt_b": "Create a Dockerfile for a Python-based web service.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 1, "prompt_a": "Suggest how to reduce this container image size.", "prompt_b": "Recommend ways to make this container image smaller.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 1, "prompt_a": "Configure a cron job that runs a backup every night.", "prompt_b": "Set up a nightly cron job to run a backup.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 1, "prompt_a": "Set up log rotation for the application logs.", "prompt_b": "Configure rotation for the application log files.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Deploy the latest release.", "prompt_b": "Roll back the latest release.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Scale up the web service.", "prompt_b": "Scale down the web service.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Start this server.", "prompt_b": "Stop this server.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Allow this inbound traffic.", "prompt_b": "Block this inbound traffic.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Enable the nightly cron job.", "prompt_b": "Disable the nightly cron job.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Write a Dockerfile for a Python web service.", "prompt_b": "Summarize the plot of this short story.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Diagnose the cause of high memory usage on this server.", "prompt_b": "Classify the sentiment of this customer review.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Roll back the last release to the previous version.", "prompt_b": "Find the correlation between price and units sold.", "source": "manual-gold", "split": "test"}
+{"domain": "devops", "label": 0, "prompt_a": "Set up log rotation for the application logs.", "prompt_b": "Propose three time slots for a call with the client.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 1, "prompt_a": "Explain how photosynthesis works.", "prompt_b": "Describe the process of photosynthesis.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 1, "prompt_a": "Give three tips for writing a clear email.", "prompt_b": "Share three pieces of advice for writing clear emails.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 1, "prompt_a": "Explain the difference between weather and climate.", "prompt_b": "How do weather and climate differ?", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 1, "prompt_a": "Describe how a hash table works.", "prompt_b": "Explain the way a hash table operates.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 1, "prompt_a": "List the main causes of inflation.", "prompt_b": "What are the primary causes of inflation?", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Approve the proposal.", "prompt_b": "Reject the proposal.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Sign the contract.", "prompt_b": "Decline the contract.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Accept the job offer.", "prompt_b": "Decline the job offer.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Approve the loan application.", "prompt_b": "Deny the loan application.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Support the policy change.", "prompt_b": "Oppose the policy change.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Explain how photosynthesis works.", "prompt_b": "Write a SQL query that counts active users per region.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "What is the capital of Australia?", "prompt_b": "Refactor this loop to use a list comprehension.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Recommend a book about negotiation.", "prompt_b": "Deploy the latest release.", "source": "manual-gold", "split": "test"}
+{"domain": "general-qa", "label": 0, "prompt_a": "Explain the water cycle in simple terms.", "prompt_b": "Summarize this customer's latest billing ticket.", "source": "manual-gold", "split": "test"}

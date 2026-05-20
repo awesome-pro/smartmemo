@@ -1,0 +1,31 @@
+{
+  "corpus": {
+    "action_templates": 73,
+    "base_prompts": 60
+  },
+  "generated_at": "2026-05-20T08:46:25.231567+00:00",
+  "hard_neg_per_template": 10,
+  "model": "qwen3:8b",
+  "n_para_base": 6,
+  "n_para_template": 4,
+  "neg_ratio": 1.0,
+  "ollama_host": "http://localhost:11434",
+  "seed": 7,
+  "train": {
+    "negatives": 4376,
+    "opposite_action": 1200,
+    "paraphrase": 4376,
+    "positives": 4376,
+    "total": 8752,
+    "unrelated": 3176
+  },
+  "train_ratio": 0.8,
+  "validation": {
+    "negatives": 1024,
+    "opposite_action": 260,
+    "paraphrase": 1024,
+    "positives": 1024,
+    "total": 2048,
+    "unrelated": 764
+  }
+}
