@@ -1,0 +1,60 @@
+{"text": "Summarize this customer's latest billing ticket.", "domain": "customer-support"}
+{"text": "Draft a polite reply asking the customer for their order number.", "domain": "customer-support"}
+{"text": "Classify the sentiment of this customer review.", "domain": "customer-support"}
+{"text": "Explain our refund policy to a frustrated customer.", "domain": "customer-support"}
+{"text": "Write an apology message for a delayed shipment.", "domain": "customer-support"}
+{"text": "Extract the customer's contact details from this email.", "domain": "customer-support"}
+{"text": "Suggest three troubleshooting steps for a login failure.", "domain": "customer-support"}
+{"text": "Translate this support reply into Spanish.", "domain": "customer-support"}
+{"text": "Summarize the open complaints from this support thread.", "domain": "customer-support"}
+{"text": "Write a follow-up message checking if the issue was resolved.", "domain": "customer-support"}
+{"text": "Explain what this Python function does.", "domain": "software-engineering"}
+{"text": "Write a unit test for the add function.", "domain": "software-engineering"}
+{"text": "Review this pull request for potential bugs.", "domain": "software-engineering"}
+{"text": "Convert this callback-based code to async and await.", "domain": "software-engineering"}
+{"text": "Suggest a name for a function that validates email addresses.", "domain": "software-engineering"}
+{"text": "Document the parameters of this API endpoint.", "domain": "software-engineering"}
+{"text": "Find the time complexity of this sorting algorithm.", "domain": "software-engineering"}
+{"text": "Refactor this loop to use a list comprehension.", "domain": "software-engineering"}
+{"text": "Explain the difference between a list and a tuple in Python.", "domain": "software-engineering"}
+{"text": "Write a regular expression that matches a phone number.", "domain": "software-engineering"}
+{"text": "Find a one-hour meeting slot next Tuesday afternoon.", "domain": "scheduling"}
+{"text": "Reschedule the standup to 10am tomorrow.", "domain": "scheduling"}
+{"text": "List all meetings on my calendar for this week.", "domain": "scheduling"}
+{"text": "Send a calendar invite to the design team for Friday.", "domain": "scheduling"}
+{"text": "Check whether I am free at 3pm on Thursday.", "domain": "scheduling"}
+{"text": "Summarize the agenda for tomorrow's planning meeting.", "domain": "scheduling"}
+{"text": "Propose three time slots for a call with the client.", "domain": "scheduling"}
+{"text": "Cancel my 2pm appointment and notify the attendees.", "domain": "scheduling"}
+{"text": "Set a reminder for the project deadline next Monday.", "domain": "scheduling"}
+{"text": "Convert this meeting time from Eastern to India Standard Time.", "domain": "scheduling"}
+{"text": "Calculate the average revenue per customer from this table.", "domain": "data-analysis"}
+{"text": "Identify the top five products by total sales.", "domain": "data-analysis"}
+{"text": "Explain the trend in this month's signup numbers.", "domain": "data-analysis"}
+{"text": "Write a SQL query that counts active users per region.", "domain": "data-analysis"}
+{"text": "Detect any outliers in this set of response times.", "domain": "data-analysis"}
+{"text": "Summarize the key findings from this survey data.", "domain": "data-analysis"}
+{"text": "Compute the month-over-month growth rate.", "domain": "data-analysis"}
+{"text": "Group these transactions by category and sum the amounts.", "domain": "data-analysis"}
+{"text": "Describe the distribution of order values.", "domain": "data-analysis"}
+{"text": "Find the correlation between price and units sold.", "domain": "data-analysis"}
+{"text": "Explain why this deployment is failing.", "domain": "devops"}
+{"text": "Write a Dockerfile for a Python web service.", "domain": "devops"}
+{"text": "Suggest how to reduce this container image size.", "domain": "devops"}
+{"text": "Diagnose the cause of high memory usage on this server.", "domain": "devops"}
+{"text": "Write a health-check endpoint for a Flask app.", "domain": "devops"}
+{"text": "Explain what this Kubernetes pod error means.", "domain": "devops"}
+{"text": "Configure a cron job that runs a backup every night.", "domain": "devops"}
+{"text": "Set up log rotation for the application logs.", "domain": "devops"}
+{"text": "Describe how to add a new environment variable to the service.", "domain": "devops"}
+{"text": "Explain what this CI pipeline step does.", "domain": "devops"}
+{"text": "Explain how photosynthesis works.", "domain": "general-qa"}
+{"text": "Summarize the plot of this short story.", "domain": "general-qa"}
+{"text": "What is the capital of Australia?", "domain": "general-qa"}
+{"text": "Give three tips for writing a clear email.", "domain": "general-qa"}
+{"text": "Explain the difference between weather and climate.", "domain": "general-qa"}
+{"text": "List the main causes of inflation.", "domain": "general-qa"}
+{"text": "Describe how a hash table works.", "domain": "general-qa"}
+{"text": "What are the benefits of regular exercise?", "domain": "general-qa"}
+{"text": "Explain the water cycle in simple terms.", "domain": "general-qa"}
+{"text": "Recommend a book about negotiation.", "domain": "general-qa"}

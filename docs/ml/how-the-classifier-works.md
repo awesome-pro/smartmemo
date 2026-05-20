@@ -1,20 +1,42 @@
 # How The Classifier Works
 
-SmartMemo uses embedding search to find candidate cache entries, but an optional
-classifier can make the final decision about whether a candidate is actually equivalent.
+SmartMemo uses embedding search to find candidate cache entries, but the equivalence
+classifier makes the final decision about whether a candidate is actually safe to reuse.
 This matters because cosine similarity is only a neighborhood signal. Prompt pairs can
 have very similar embeddings while asking for opposite actions.
 
-The Phase 2 classifier is intentionally small. It receives two embedding vectors and
-builds the standard matching representation:
+The classifier is intentionally small. It receives two embedding vectors and builds the
+standard matching representation:
 
 ```text
 [embedding_a, embedding_b, abs(embedding_a - embedding_b), embedding_a * embedding_b]
 ```
 
-That vector goes through a compact MLP and returns a probability in `[0, 1]`. A higher
-probability means the model believes both prompts should produce the same useful response.
+That vector goes through a compact MLP (`embed_dim * 4 -> 128 -> 64 -> 1`) and returns a
+probability in `[0, 1]`. A higher probability means the model believes both prompts
+should produce the same useful response. The model implementation lives in
+`src/smartmemo/classifier/model.py`.
 
-The model implementation lives in `src/smartmemo/classifier/model.py`. At runtime,
-`SmartMemo(..., classifier=ClassifierConfig(model_path=...))` loads a checkpoint and
-uses classifier scores instead of cosine thresholding for cache-hit decisions.
+## The bundled classifier (`classifier-v1`)
+
+SmartMemo ships a pretrained checkpoint inside the package at
+`smartmemo/_models/classifier-v1.pt`. Load it with `ClassifierConfig.bundled()`.
+
+`classifier-v1` is a **generic cold-start model**. Its training data was built locally:
+a hand-authored prompt corpus across six domains is expanded into ~10,800 labeled pairs
+by a local LLM (paraphrases for positives) and by templated same-object/opposite-action
+swaps (guaranteed-correct hard negatives). The full pipeline is
+`scripts/generate_training_data.py`; the auditable model card is
+`smartmemo/_models/classifier-v1.report.json`.
+
+Two limitations are worth knowing:
+
+- It is bound to the `all-MiniLM-L6-v2` embedding space (384 dimensions). Use the same
+  embedding model when the bundled classifier is active.
+- Being generic, it trades per-domain peak accuracy for broad coverage. Per-domain
+  accuracy improves once you collect feedback and run `smartmemo retrain` — see
+  `docs/ml/training-your-own.md`.
+
+At runtime, `SmartMemo(..., classifier=ClassifierConfig.bundled())` (or any
+`ClassifierConfig(model_path=...)`) loads a checkpoint and uses classifier scores instead
+of cosine thresholding for cache-hit decisions.
