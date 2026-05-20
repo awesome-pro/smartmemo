@@ -1,5 +1,25 @@
 # Training Your Own Classifier
 
+SmartMemo already ships a pretrained classifier (`ClassifierConfig.bundled()`). Train your
+own when you want a domain-specialized model or want to reproduce the shipped one.
+
+## Reproducing the bundled classifier
+
+The shipped `classifier-v1` is fully reproducible from committed data:
+
+```bash
+# Optional: regenerate the dataset from the prompt corpus (requires a local Ollama model)
+python scripts/generate_training_data.py
+
+# Train and package the classifier from the committed dataset
+uv run python scripts/train_classifier_v1.py
+```
+
+`train_classifier_v1.py` writes the checkpoint to `src/smartmemo/_models/classifier-v1.pt`
+and an auditable model card next to it.
+
+## Dataset format
+
 Training data is JSONL prompt pairs. Each line must include `prompt_a`, `prompt_b`, and
 `label`. Optional fields such as `domain`, `source`, and `split` make it easier to filter
 experiments.

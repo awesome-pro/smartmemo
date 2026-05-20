@@ -1,24 +1,21 @@
 # Quickstart
 
-SmartMemo is an async-first semantic cache for LLM agent calls. The core package ships
-the baseline cache layer: embeddings, top-k retrieval, SQLite persistence, and a cosine
-threshold decision. If you provide a trained classifier checkpoint, SmartMemo keeps
-embedding search as the fast candidate selector and uses the classifier as the actual
-cache-hit decision.
+SmartMemo is an async-first semantic cache for LLM agent calls. Embedding search finds
+candidate cache entries; a learned equivalence classifier decides whether a candidate is
+genuinely safe to reuse. That classifier is what separates SmartMemo from a fixed cosine
+threshold: "approve this refund" and "deny this refund" are highly cosine-similar but must
+never share a cache entry.
 
-Install the core package:
+## Install
 
-```bash
-pip install smartmemo
-```
-
-Install real embedding and vector-search dependencies:
+SmartMemo's embedding and classifier stack depends on PyTorch, FAISS, and
+SentenceTransformers, so install the `ml` extra:
 
 ```bash
 pip install "smartmemo[ml]"
 ```
 
-Minimal use:
+## Minimal use
 
 ```python
 from smartmemo import SmartMemo
@@ -33,21 +30,28 @@ print(result.response)
 print(result.was_cache_hit)
 ```
 
-Classifier-gated use:
+Without a classifier, SmartMemo decides cache hits with a cosine-similarity threshold —
+the measured baseline the classifier is built to beat.
+
+## Classifier-gated caching (recommended)
+
+SmartMemo ships a pretrained generic equivalence classifier. Turn it on with one line:
 
 ```python
 from smartmemo import ClassifierConfig, SmartMemo
 
 cache = SmartMemo(
     domain="customer-support",
-    classifier=ClassifierConfig(model_path="models/classifier-v1.pt"),
+    classifier=ClassifierConfig.bundled(),
 )
 ```
 
-No production pretrained checkpoint is bundled yet. Train your own checkpoint with
-`smartmemo train-classifier` before enabling classifier-gated decisions.
+Cosine search now only selects candidates; the learned classifier makes the final
+cache-hit decision, and `CacheResult.classifier_score` is populated. The bundled model
+is a generic cold-start classifier — accuracy on your own traffic improves with the
+feedback-driven retraining loop below. See `docs/ml/how-the-classifier-works.md`.
 
-Feedback export:
+## Feedback export
 
 ```python
 result = await cache.get_or_call(prompt="Summarize this ticket", llm_function=call_llm)
@@ -58,7 +62,7 @@ if result.was_cache_hit:
 cache.export_feedback_pairs("data/feedback_pairs.jsonl")
 ```
 
-Manual retraining:
+## Manual retraining
 
 ```bash
 uv run smartmemo --db-path .smartmemo/cache.db retrain \

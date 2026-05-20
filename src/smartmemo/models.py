@@ -54,6 +54,35 @@ class ClassifierConfig(BaseModel):
     device: str = "cpu"
     threshold: float | None = Field(default=None, ge=0.0, le=1.0)
 
+    @classmethod
+    def bundled(
+        cls,
+        *,
+        device: str = "cpu",
+        threshold: float | None = 0.95,
+    ) -> ClassifierConfig:
+        """Return config for the pretrained classifier shipped with smartmemo.
+
+        This is the opt-in, zero-training path: pass the result to
+        ``SmartMemo(..., classifier=ClassifierConfig.bundled())`` and the learned
+        classifier gates every cache hit. The default ``threshold`` of 0.95 was
+        tuned on a hand-curated gold set for precision-first operation, since a
+        false-positive cache hit is the failure mode that matters. Using the
+        bundled classifier requires the optional ML dependencies
+        (``pip install smartmemo[ml]``).
+
+        Raises:
+            SmartMemoError: if the checkpoint is missing from this installation.
+        """
+
+        from smartmemo.resources import bundled_classifier_path
+
+        return cls(
+            model_path=bundled_classifier_path(),
+            device=device,
+            threshold=threshold,
+        )
+
 
 class CacheEntry(BaseModel):
     """A persisted prompt/response pair."""
