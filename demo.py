@@ -20,6 +20,7 @@ import asyncio
 import json
 import logging
 import os
+import warnings
 from decimal import Decimal
 from pathlib import Path
 
@@ -199,7 +200,12 @@ def configure_demo_environment() -> None:
     """Keep terminal output focused during screen recording."""
 
     os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+    os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+    warnings.filterwarnings(
+        "ignore",
+        message=".*unauthenticated requests.*",
+    )
     logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
     logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 

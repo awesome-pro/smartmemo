@@ -20,6 +20,22 @@ Without a classifier, SmartMemo decides cache hits with a cosine threshold — t
 baseline. With the bundled classifier, cosine search becomes the candidate selector and
 the learned classifier makes the final cache-hit decision.
 
+## Video Demo
+
+Watch the full SmartMemo walkthrough: why cosine-only semantic caching fails, how the
+classifier gate blocks unsafe reuse, how the live portfolio demo works, and how
+`demo.py` exports bad-hit feedback for retraining.
+
+<a href="https://youtu.be/UoHwsRx7J-I" target="_blank" rel="noopener noreferrer">
+  <img
+    src="https://img.youtube.com/vi/UoHwsRx7J-I/maxresdefault.jpg"
+    alt="Watch the SmartMemo video demo"
+    width="100%"
+  />
+</a>
+
+[Open the video on YouTube](https://youtu.be/UoHwsRx7J-I)
+
 ## Install
 
 SmartMemo's embedding and classifier stack depends on PyTorch, FAISS, and
